@@ -9,4 +9,8 @@
         <!-- API 14 theme customizations can go here. -->
     </style>
 
+    <style name="NoActionBarBaseTheme" parent="android:Theme.Holo.Light.NoActionBar"></style>
+
+    <style name="NoActionBarTheme" parent="NoActionBarBaseTheme"></style>
+
 </resources>

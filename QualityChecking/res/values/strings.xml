@@ -4,5 +4,9 @@
     <string name="app_name">QualityChecking</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="setting_interface">设置界面</string>
+    <string name="history_record">历史记录</string>
+    <string name="operation_menu">操作菜单</string>
+    <string name="title_activity_set">SetActivity</string>
 
 </resources>

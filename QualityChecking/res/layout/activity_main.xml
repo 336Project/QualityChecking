@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <!-- <include layout="@layout/base_linearlayout" /> -->
+            <include layout="@layout/base_linearlayout" />
         </LinearLayout>
 
         <!-- The navigation drawer -->

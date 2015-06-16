@@ -22,16 +22,16 @@ public class MainActivity extends Activity implements OnClickListener{
     }
 	private void initView() {
 		drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//		findViewById(R.id.rl_left).setOnClickListener(this);
+		findViewById(R.id.rl_left).setOnClickListener(this);
 		findViewById(R.id.ll_set).setOnClickListener(this);
 	}
 	@Override
 	public void onClick(View v) {
 		Intent intent = new Intent();
 		switch (v.getId()) {
-//		case R.id.rl_left:
-//			drawer_layout.openDrawer(Gravity.LEFT);
-//			break;
+		case R.id.rl_left:
+			drawer_layout.openDrawer(Gravity.LEFT);
+			break;
 		case R.id.ll_set:
 			intent.setClass(MainActivity.this, SetActivity.class);
 			startActivity(intent);

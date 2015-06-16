@@ -5,7 +5,7 @@
     android:orientation="vertical"
     tools:context="com.ateam.qc.SetActivity" >
 
-    <!-- <include layout="@layout/base_linearlayout" /> -->
+    <include layout="@layout/base_linearlayout" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,16 +15,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical" >
+            android:layout_height="52dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dimen_16"
+            android:background="@drawable/menu_background_selector"
+             >
 
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/set_item_01" />
+                android:src="@drawable/set_item_1" />
 
             <TextView
+                android:layout_marginLeft="@dimen/dimen_08"
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -33,26 +37,29 @@
                 android:textColor="#A8A8A8"
                 android:textSize="17sp" />
         </LinearLayout>
-		<View 
-		    android:layout_width="match_parent"
+
+        <View
+            android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#EEEEEE"
             android:layout_marginLeft="@dimen/dimen_16"
             android:layout_marginRight="@dimen/dimen_16"
-		    />
+            android:background="#EEEEEE" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical" >
+            android:layout_height="52dp"
+            android:gravity="center_vertical"
+             android:paddingLeft="@dimen/dimen_16"
+             android:background="@drawable/menu_background_selector"
+             >
 
             <ImageView
-                android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/set_item_01" />
+                android:src="@drawable/set_item_2" />
 
             <TextView
-                android:id="@+id/textView1"
+                android:layout_marginLeft="@dimen/dimen_08"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -61,19 +68,28 @@
                 android:textSize="17sp" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:background="#EEEEEE" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical" >
+            android:layout_height="52dp"
+            android:gravity="center_vertical"
+             android:paddingLeft="@dimen/dimen_16"
+             android:background="@drawable/menu_background_selector"
+             >
 
             <ImageView
-                android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/set_item_01" />
+                android:src="@drawable/set_item_3" />
 
             <TextView
-                android:id="@+id/textView1"
+                android:layout_marginLeft="@dimen/dimen_08"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -81,6 +97,13 @@
                 android:textColor="#A8A8A8"
                 android:textSize="17sp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:background="#EEEEEE" />
     </LinearLayout>
 
 </LinearLayout>

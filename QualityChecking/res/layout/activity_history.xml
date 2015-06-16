@@ -4,6 +4,74 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ateam.qc.HistoryActivity" >
-	
-	<include layout="@layout/base_linearlayout"/>
+
+    <include layout="@layout/base_linearlayout" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/ll_norecord"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="当前没有历史记录"
+                android:textColor="#CACACA"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/listView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+            </ListView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp" >
+
+                <TextView
+                    android:id="@+id/tv_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/tv_delete_selector"
+                    android:gravity="center"
+                    android:text="删除"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/tv_input_selector"
+                    android:gravity="center"
+                    android:text="导出"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
 </LinearLayout>

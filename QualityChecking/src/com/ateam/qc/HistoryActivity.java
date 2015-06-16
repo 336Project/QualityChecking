@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class HistoryActivity extends Activity implements OnClickListener{
+public class HistoryActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +26,14 @@ public class HistoryActivity extends Activity implements OnClickListener{
 		iv_left.setImageResource(R.drawable.back);
 		RelativeLayout rl_right = (RelativeLayout) findViewById(R.id.rl_right);
 		rl_right.setVisibility(View.INVISIBLE);
+		findViewById(R.id.tv_delete).setOnClickListener(this);
+		findViewById(R.id.tv_input).setOnClickListener(this);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.set, menu);
+		// getMenuInflater().inflate(R.menu.set, menu);
 		return true;
 	}
 
@@ -41,7 +43,12 @@ public class HistoryActivity extends Activity implements OnClickListener{
 		case R.id.rl_left:
 			finish();
 			break;
+		case R.id.tv_delete:
 
+			break;
+		case R.id.tv_input:
+
+			break;
 		default:
 			break;
 		}

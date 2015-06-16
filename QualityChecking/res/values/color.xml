@@ -5,4 +5,10 @@
     <color name="black">#000000</color>
     <color name="black_menu">#3E3E3E</color>
     <color name="menu_pressed">#113E3E3E</color>
+    <color name="red_textview_normal">#F56262</color>
+    <color name="red_textview_press">#E35858</color>
+    <color name="green_textview_normal">#1ADB27</color>
+    <color name="green_textview_press">#17C624</color>
+    <color name="orange_textview_normal">#FC8943</color>
+    <color name="orange_textview_press">#EA7E3E</color>
 </resources>

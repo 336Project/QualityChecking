@@ -25,7 +25,12 @@
         </activity>
         <activity
             android:name=".SetActivity"
-            android:label="@string/title_activity_set" 
+            android:label="@string/title_activity_set"
+            android:theme="@style/NoActionBarTheme" >
+        </activity>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="@string/title_activity_history" 
             android:theme="@style/NoActionBarTheme"
             >
         </activity>

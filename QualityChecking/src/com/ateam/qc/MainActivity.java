@@ -24,6 +24,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		findViewById(R.id.rl_left).setOnClickListener(this);
 		findViewById(R.id.ll_set).setOnClickListener(this);
+		findViewById(R.id.ll_history).setOnClickListener(this);
 	}
 	@Override
 	public void onClick(View v) {
@@ -35,6 +36,11 @@ public class MainActivity extends Activity implements OnClickListener{
 		case R.id.ll_set:
 			intent.setClass(MainActivity.this, SetActivity.class);
 			startActivity(intent);
+			break;
+		case R.id.ll_history:
+			intent.setClass(MainActivity.this, HistoryActivity.class);
+			startActivity(intent);
+			break;
 		default:
 			break;
 		}

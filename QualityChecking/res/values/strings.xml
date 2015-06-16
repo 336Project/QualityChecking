@@ -8,5 +8,6 @@
     <string name="history_record">历史记录</string>
     <string name="operation_menu">操作菜单</string>
     <string name="title_activity_set">SetActivity</string>
+    <string name="title_activity_history">HistoryActivity</string>
 
 </resources>

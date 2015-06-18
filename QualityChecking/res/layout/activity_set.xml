@@ -14,26 +14,22 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/layout_setting_group"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dimen_16"
+            android:onClick="goSettingGroup"
             android:background="@drawable/menu_background_selector"
              >
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/set_item_1" />
-
             <TextView
-                android:layout_marginLeft="@dimen/dimen_08"
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="组别设置"
+                android:drawableLeft="@drawable/set_item_1"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"
                 android:textColor="#A8A8A8"
                 android:textSize="17sp" />
         </LinearLayout>
@@ -46,24 +42,22 @@
             android:background="#EEEEEE" />
 
         <LinearLayout
+            android:id="@+id/layout_setting_size"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:gravity="center_vertical"
-             android:paddingLeft="@dimen/dimen_16"
-             android:background="@drawable/menu_background_selector"
+            android:onClick="goSettingSize"
+            android:background="@drawable/menu_background_selector"
              >
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/set_item_2" />
-
             <TextView
-                android:layout_marginLeft="@dimen/dimen_08"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="型号设置"
+                android:drawableLeft="@drawable/set_item_2"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"
                 android:textColor="#A8A8A8"
                 android:textSize="17sp" />
         </LinearLayout>
@@ -76,23 +70,21 @@
             android:background="#EEEEEE" />
 
         <LinearLayout
+            android:id="@+id/layout_setting_project"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:gravity="center_vertical"
-             android:paddingLeft="@dimen/dimen_16"
+            android:onClick="goSettingProject"
              android:background="@drawable/menu_background_selector"
              >
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/set_item_3" />
-
             <TextView
-                android:layout_marginLeft="@dimen/dimen_08"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
+                android:drawableLeft="@drawable/set_item_3"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"
                 android:text="项目设置"
                 android:textColor="#A8A8A8"
                 android:textSize="17sp" />

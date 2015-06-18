@@ -1,15 +1,18 @@
 package com.ateam.qc;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+/**
+ * 设置界面
+ * @author Helen
+ * 2015-6-17下午2:43:17
+ */
 public class SetActivity extends Activity implements OnClickListener{
 
 	@Override
@@ -39,12 +42,27 @@ public class SetActivity extends Activity implements OnClickListener{
 			break;
 		}
 	}
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.set, menu);
-		return true;
+	/**
+	 * 设置组别
+	 */
+	public void goSettingGroup(View view){
+		jump(SettingGroupActivity.class);
 	}
-
+	/**
+	 * 设置型号
+	 */
+	public void goSettingSize(View view){
+		jump(SettingSizeActivity.class);
+	}
+	/**
+	 * 设置项目
+	 */
+	public void goSettingProject(View view){
+		jump(SettingProjectActivity.class);
+	}
+	
+	private void jump(Class<?> cls){
+		startActivity(new Intent(this, cls));
+	}
 	
 }

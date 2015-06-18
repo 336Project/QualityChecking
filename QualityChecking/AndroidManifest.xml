@@ -34,6 +34,21 @@
             android:theme="@style/NoActionBarTheme"
             >
         </activity>
+        <activity
+            android:name=".SettingGroupActivity"
+            android:theme="@style/NoActionBarTheme"
+            >
+        </activity>
+        <activity
+            android:name=".SettingProjectActivity"
+            android:theme="@style/NoActionBarTheme"
+            >
+        </activity>
+        <activity
+            android:name=".SettingSizeActivity"
+            android:theme="@style/NoActionBarTheme"
+            >
+        </activity>
     </application>
 
 </manifest>

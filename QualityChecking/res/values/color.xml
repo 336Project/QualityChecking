@@ -12,8 +12,4 @@
     <color name="green_textview_press">#17C624</color>
     <color name="orange_textview_normal">#FC8943</color>
     <color name="orange_textview_press">#EA7E3E</color>
-<!--     MaterialSpinner -->
-    <color name="disabled_color">#44000000</color>
-    <color name="error_color">#E7492E</color>
-	<color name="spinner_base_color">#44000000</color>
 </resources>

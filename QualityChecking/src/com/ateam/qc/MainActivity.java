@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.ateam.qc.adapter.ContentItemAdapter;
-import com.ateam.qc.widget.MaterialSpinner;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -2,6 +2,8 @@ package com.team.hbase.adapter;
 
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 /**
  * 
@@ -40,7 +42,13 @@ public class ViewHolder {
 	public View getConvertView() {
 		return convertView;
 	}
-
+	
+	public TextView getTextView(int viewId){
+		return getView(viewId);
+	}
+	public CheckBox getCheckBox(int viewId){
+		return getView(viewId);
+	}
 	/*@SuppressWarnings("unchecked")
 	public static <T extends View> T get(View view, int id) {
 		SparseArray<View> viewHolder = (SparseArray<View>) view.getTag();

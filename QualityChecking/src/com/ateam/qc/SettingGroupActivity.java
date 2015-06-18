@@ -62,6 +62,10 @@ public class SettingGroupActivity extends HBaseActivity {
 			showMsg(this, "请输入组别名称");
 			return;
 		}
+		if(mGroupDao.isExist(name)){
+			showMsg(this, "该组别已存在，请重新输入");
+			return;
+		}
 		Group group=new Group();
 		group.setName(name);
 		mGroupDao.save(group);

@@ -3,60 +3,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-	    android:minHeight="40dp"
-	    android:gravity="center"
-	    >
-	    <TextView 
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.5"
-	        android:text="序号"
-	        android:gravity="center"
-	        />
-	    <TextView 
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="2"
-	        android:text="项目内容"
-	        android:gravity="center"
-	        />
-	    <TextView 
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.8"
-	        android:text="简称"
-	        android:gravity="center"
-	        />
-	</LinearLayout>
-	<ListView
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:minHeight="40dp"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="序号" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="项目内容" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="center"
+            android:text="简称" />
+    </LinearLayout>
+
+    <ListView
         android:id="@+id/listView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" >
     </ListView>
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-	    >
-	    <Button 
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:text="新增"
-	        android:onClick="addProject"
-	        />
-	    <Button 
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:text="删除"
-	        android:onClick="deleteProject"
-	        />
-	</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="4dp"
+        >
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="addProject"
+            android:text="新增" 
+            android:textColor="@color/white"
+            android:background="@drawable/tv_add_selector"
+            android:layout_marginRight="2dp"
+            />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="deleteProject"
+            android:text="删除" 
+            android:textColor="@color/white"
+            android:background="@drawable/tv_delete_selector"
+            android:layout_marginLeft="2dp"
+            />
+    </LinearLayout>
+
 </LinearLayout>

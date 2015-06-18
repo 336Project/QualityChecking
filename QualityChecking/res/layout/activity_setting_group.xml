@@ -8,6 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="5dp" >
 
         <com.team.hbase.widget.HAutoCompleteTextView
@@ -21,20 +22,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="addGroup"
-            android:text="添加" />
+            android:text="添加"
+            android:background="@drawable/button_add_selector"
+            android:textColor="@color/button_add_selector"
+             />
+        
+        
     </LinearLayout>
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" >
+        android:layout_weight="1" 
+        >
     </ListView>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="deleteGroup"
+        android:background="@drawable/tv_delete_selector"
+        android:textColor="@color/white"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="删除" />
 
 </LinearLayout>

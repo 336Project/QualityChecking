@@ -1,9 +1,16 @@
 package com.ateam.qc;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.ateam.qc.adapter.ContentItemAdapter;
+import com.ateam.qc.dao.GroupDao;
+import com.ateam.qc.dao.ProjectDao;
+import com.ateam.qc.model.ExcelItem;
+import com.ateam.qc.model.Group;
+import com.ateam.qc.model.Project;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,6 +35,11 @@ public class MainActivity extends Activity implements OnClickListener{
 	private ArrayAdapter<String> adapter;
 	private ListView lvContentBody;
 	private View viewHead;
+	private GroupDao mGroupDao;
+	private List<Group> mDatas;
+	private ArrayList<ExcelItem> mExcelItems=new ArrayList<ExcelItem>();
+	private ProjectDao mProjectDao;
+	private List<Project> mProjects;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +67,19 @@ public class MainActivity extends Activity implements OnClickListener{
 		initSpinnerNoHintNoFloatingLabel();
 	}
 	private void initSpinnerNoHintNoFloatingLabel() {
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ITEMS);
+		
+		mGroupDao=new GroupDao(this);
+		mDatas=mGroupDao.query();
+		if(mDatas==null||mDatas.size()==0){
+			mDatas=new ArrayList<Group>();
+//			showMsg(this, R.string.empty_data);
+		}
+		String[] mGroupString = new String[mDatas.size()];
+		for (int i = 0; i < mDatas.size(); i++) {
+			mGroupString[i]=new String(mDatas.get(i).getName());
+		}
+		
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mGroupString);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner spinner1 = (Spinner) viewHead.findViewById(R.id.spinner1);
 		spinner1.setAdapter(adapter);
@@ -63,7 +87,20 @@ public class MainActivity extends Activity implements OnClickListener{
 	private void initListView() {
 		lvContentBody = (ListView) findViewById(R.id.lv_content_body);
 		lvContentBody.addHeaderView(viewHead);
-		lvContentBody.setAdapter(new ContentItemAdapter(this));
+		
+		mProjectDao=new ProjectDao(this);
+		mProjects=mProjectDao.query();
+		for (int i = 0; i < mProjects.size(); i++) {
+			ExcelItem excelItem = new ExcelItem();
+			excelItem.setProject(mProjects.get(i));
+			mExcelItems.add(excelItem);
+		}
+//		if(mDatas==null||mDatas.size()==0){
+//			mDatas=new ArrayList<Project>();
+//			showMsg(this, R.string.empty_data);
+//		}
+		
+		lvContentBody.setAdapter(new ContentItemAdapter(this,mExcelItems));
 	}
 
 	@Override

@@ -8,19 +8,25 @@
         android:id="@+id/layout_action_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#00a2e3"
+        android:background="#3190E8"
         android:gravity="center"
-        android:minHeight="60dp"
+        android:minHeight="50dp"
         android:orientation="horizontal"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp" >
+        >
 
-        <ImageView
-            android:id="@+id/iv_left_icon"
-            android:layout_width="30dp"
-            android:layout_height="fill_parent"
-            android:src="@drawable/ic_launcher"
-            android:contentDescription="@string/app_name" />
+        <RelativeLayout
+            android:id="@+id/rl_left"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/iv_left_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_launcher" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/layout_custom_title_view"
@@ -31,24 +37,33 @@
             android:orientation="vertical" >
         </LinearLayout>
 
-        <ImageView
+            <RelativeLayout
+            android:id="@+id/rl_right"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center" >
+
+             <ImageView
             android:id="@+id/iv_right_icon"
-            android:layout_width="30dp"
-            android:layout_height="fill_parent"
-            android:src="@drawable/ic_launcher"
-            android:contentDescription="@string/app_name" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_launcher" />
+        </RelativeLayout>
+        
+        
     </LinearLayout>
-	<ViewStub 
-	    android:id="@+id/vs_error"
-	    android:layout_width="fill_parent"
+
+    <ViewStub
+        android:id="@+id/vs_error"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout="@layout/item_error"
-	    />
+        android:layout="@layout/item_error" />
+
     <FrameLayout
         android:id="@+id/fragment_content"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="visible"
-         />
+        android:visibility="visible" />
 
 </LinearLayout>

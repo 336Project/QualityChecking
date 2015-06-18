@@ -48,7 +48,7 @@
                 android:text="检查数量:" />
 
             <com.ateam.qc.widget.CicleAddAndSubView
-                android:id="@+id/asViewCheck"
+                android:id="@+id/asView_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
@@ -67,8 +67,11 @@
                 android:text="不合格数量:" />
 
             <com.ateam.qc.widget.CicleAddAndSubView
+                 android:id="@+id/asView_unqualified"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+               	android:layout_weight="1"
+                 />
         </LinearLayout>
     </LinearLayout>
 

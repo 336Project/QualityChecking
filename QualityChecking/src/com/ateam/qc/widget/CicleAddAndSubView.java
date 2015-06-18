@@ -121,8 +121,6 @@ public class CicleAddAndSubView extends LinearLayout {
     }
 
 
-
-
     /**
      *设置加号图片
      * @param addBtnDrawable

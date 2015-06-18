@@ -1,6 +1,7 @@
 package com.ateam.qc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.ateam.qc.dao.GroupDao;
@@ -32,7 +33,7 @@ public class SettingGroupActivity extends HBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getRightIcon().setVisibility(View.GONE);
-		getLeftIcon().setImageDrawable(getResources().getDrawable(R.drawable.back));
+		getLeftIcon().setImageResource(R.drawable.back);
 		setBaseContentView(R.layout.activity_setting_group);
 		setActionBarTitle("组别设置");
 		init();

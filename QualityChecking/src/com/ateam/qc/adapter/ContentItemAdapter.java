@@ -1,7 +1,11 @@
 package com.ateam.qc.adapter;
 
+import java.util.ArrayList;
+
 import com.ateam.qc.R;
+import com.ateam.qc.model.ExcelItem;
 import com.ateam.qc.widget.CicleAddAndSubView;
+import com.ateam.qc.widget.CicleAddAndSubView.OnNumChangeListener;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,13 +17,15 @@ import android.widget.TextView;
 public class ContentItemAdapter extends BaseAdapter{
 	
 	private Context mContext;
+	private ArrayList<ExcelItem> excelItems;
 
-	public ContentItemAdapter(Context mContext){
+	public ContentItemAdapter(Context mContext,ArrayList<ExcelItem> excelItems){
 		this.mContext = mContext;
+		this.excelItems = excelItems;
 	}
 	@Override
 	public int getCount() {
-		return 5;
+		return excelItems.size();
 	}
 
 	@Override
@@ -36,27 +42,47 @@ public class ContentItemAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View inflate=null;
 		Viewholder viewholder=null;
+		final ExcelItem excelItem = excelItems.get(position);
 		if(convertView==null){
 			LayoutInflater layoutInflater = LayoutInflater.from(mContext);
 			inflate = layoutInflater.inflate(R.layout.content_body_item, null);
 			TextView tvItemDescription = (TextView) inflate.findViewById(R.id.tv_item_description);
-			CicleAddAndSubView asViewCheck = (CicleAddAndSubView) inflate.findViewById(R.id.asViewCheck);
+			CicleAddAndSubView asViewCheck = (CicleAddAndSubView) inflate.findViewById(R.id.asView_check);
+			CicleAddAndSubView asViewUnqualified = (CicleAddAndSubView) inflate.findViewById(R.id.asView_unqualified);
 			viewholder=new Viewholder();
 			viewholder.setTvItemDescriptionTextView(tvItemDescription);
 			viewholder.setAsViewCheck(asViewCheck);
+			viewholder.setAsViewUnqualified(asViewUnqualified);
 			inflate.setTag(viewholder);
 		}
 		else{
 			inflate=convertView;
 			viewholder = (Viewholder) inflate.getTag();
 		}
-		viewholder.getTvItemDescriptionTextView().setText("飞翔荷兰人");
-		viewholder.getAsViewCheck().setNum(5);
+		viewholder.getTvItemDescriptionTextView().setText(excelItem.getProject().getContent());
+		viewholder.getAsViewCheck().setOnNumChangeListener(new OnNumChangeListener() {
+			@Override
+			public void onNumChange(View view, int stype, int num) {
+				excelItem.setCheckNum(num);
+			}
+		});
+		viewholder.getAsViewCheck().setNum(excelItem.getCheckNum());
+		viewholder.getAsViewUnqualified().setOnNumChangeListener(new OnNumChangeListener() {
+			@Override
+			public void onNumChange(View view, int stype, int num) {
+				excelItem.setUnqualifiedNum(num);
+			}
+		});
+		viewholder.getAsViewUnqualified().setNum(excelItem.getUnqualifiedNum());
+		
+		
+		
 		return inflate;
 	}
 	class Viewholder{
 		public TextView tvItemDescriptionTextView;
 		public CicleAddAndSubView asViewCheck;
+		private CicleAddAndSubView asViewUnqualified;
 
 		public CicleAddAndSubView getAsViewCheck() {
 			return asViewCheck;
@@ -72,6 +98,14 @@ public class ContentItemAdapter extends BaseAdapter{
 
 		public void setTvItemDescriptionTextView(TextView tvItemDescriptionTextView) {
 			this.tvItemDescriptionTextView = tvItemDescriptionTextView;
+		}
+
+		public CicleAddAndSubView getAsViewUnqualified() {
+			return asViewUnqualified;
+		}
+
+		public void setAsViewUnqualified(CicleAddAndSubView asViewUnqualified) {
+			this.asViewUnqualified = asViewUnqualified;
 		}
 	}
 }

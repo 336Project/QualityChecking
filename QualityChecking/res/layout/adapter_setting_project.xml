@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:layout_height="48dp" >
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal" 
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    >
     
 	<CheckBox 
 	    android:id="@+id/cb_project"
-	    android:layout_width="wrap_content"
+	    android:layout_width="0dp"
 	    android:layout_height="wrap_content"
 	    android:layout_weight="0.5"
+	    style="@style/MyCheckBox"
+	     android:gravity="center"
 	    android:text="1"
 	    />
 	<TextView 
 	    android:id="@+id/tv_project_content"
 	    android:layout_width="0dp"
 	    android:layout_height="wrap_content"
+	    android:gravity="center"
 	    android:layout_weight="2"
 	    />
 	<TextView 
@@ -22,5 +32,7 @@
 	    android:layout_width="0dp"
 	    android:layout_height="wrap_content"
 	    android:layout_weight="0.8"
+	     android:gravity="center"
 	    />
 </LinearLayout>
+</RelativeLayout>

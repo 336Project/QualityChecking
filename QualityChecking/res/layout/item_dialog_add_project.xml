@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="序号：" />
+            android:text="序　　号:" />
 
         <Spinner
             android:id="@+id/sp_no"
@@ -34,7 +34,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="简称：" />
+            android:text="简　　称:" />
 
         <com.team.hbase.widget.HAutoCompleteTextView
             android:id="@+id/et_short_name"
@@ -48,21 +48,20 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginTop="15dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="项目内容：" />
+            android:text="项目内容:" />
 
         <com.team.hbase.widget.HAutoCompleteTextView
             android:id="@+id/et_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:singleLine="false"
-            android:lines="4"
-            android:minHeight="120dp"
+            android:minLines="4"
             android:gravity="start"
              />
     </LinearLayout>

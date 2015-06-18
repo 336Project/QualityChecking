@@ -79,7 +79,9 @@ public class SettingProjectActivity extends HBaseActivity {
 		builder.setTitle("添加项目");
 		View v=LayoutInflater.from(this).inflate(R.layout.item_dialog_add_project, null);
 		final Spinner noSpinner=(Spinner) v.findViewById(R.id.sp_no);
-		noSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mProNoList));
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mProNoList);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		noSpinner.setAdapter(adapter);
 		final HAutoCompleteTextView editShorName = (HAutoCompleteTextView) v.findViewById(R.id.et_short_name);
 		final HAutoCompleteTextView editContent = (HAutoCompleteTextView) v.findViewById(R.id.et_content);
 		builder.setView(v);

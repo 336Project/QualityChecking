@@ -21,7 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="addSize"
-            android:text="添加" />
+            android:text="添加" 
+            android:background="@drawable/button_add_selector"
+            android:textColor="@color/button_add_selector"
+            />
     </LinearLayout>
 
     <ListView
@@ -35,6 +38,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="deleteSize"
+        android:background="@drawable/tv_delete_selector"
+        android:textColor="@color/white"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="删除" />
 
 </LinearLayout>

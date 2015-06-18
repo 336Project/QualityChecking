@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/white" >
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -18,6 +19,18 @@
             android:orientation="vertical" >
 
             <include layout="@layout/base_linearlayout" />
+
+
+            <ListView
+                android:id="@+id/lv_content_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:divider="#00000000"
+                android:dividerHeight="8dp" >
+            </ListView>
         </LinearLayout>
 
         <!-- The navigation drawer -->
@@ -51,9 +64,9 @@
                 android:layout_height="@dimen/menu_item_height"
                 android:layout_marginBottom="12dp"
                 android:layout_marginTop="12dp"
+                android:background="@drawable/menu_background_selector"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:background="@drawable/menu_background_selector"
                 android:paddingLeft="48dp" >
 
                 <ImageView
@@ -65,9 +78,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_24"
+                    android:duplicateParentState="true"
                     android:text="@string/setting_interface"
                     android:textColor="@color/menu_selector"
-                    android:duplicateParentState="true"
                     android:textSize="@dimen/textsize_16" />
             </LinearLayout>
 
@@ -75,9 +88,9 @@
                 android:id="@+id/ll_history"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/menu_item_height"
+                android:background="@drawable/menu_background_selector"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:background="@drawable/menu_background_selector"
                 android:paddingLeft="48dp" >
 
                 <ImageView

@@ -1,6 +1,12 @@
 package com.ateam.qc.model;
 
+import net.tsz.afinal.annotation.sqlite.Table;
+
+@Table(name=ExcelItem.TABLE_EXCEL_ITEM)
 public class ExcelItem {
+	protected static final String TABLE_EXCEL_ITEM="tb_excel_item";
+	private int id;
+	private int flowId;//流水号用来和excel表中的数据进行绑定
 	private Project project; //项目内容 
 	private Size size; //型号
 	private int checkNum; //检查数量
@@ -9,6 +15,19 @@ public class ExcelItem {
 	private int ngNum;//NG数量
 	private String processMode;//处理方式
 	private String[] pictureArray; //照片
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getFlowId() {
+		return flowId;
+	}
+	public void setFlowId(int flowId) {
+		this.flowId = flowId;
+	}
 	public Project getProject() {
 		return project;
 	}

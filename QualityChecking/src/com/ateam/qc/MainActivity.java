@@ -40,6 +40,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	private ArrayList<ExcelItem> mExcelItems=new ArrayList<ExcelItem>();
 	private ProjectDao mProjectDao;
 	private List<Project> mProjects;
+	private ContentItemAdapter mAdapter;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ public class MainActivity extends Activity implements OnClickListener{
         initView();
     }
 	private void initView() {
+		findViewById(R.id.tv_input).setOnClickListener(this);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		findViewById(R.id.rl_left).setOnClickListener(this);
 		findViewById(R.id.ll_set).setOnClickListener(this);
@@ -87,7 +89,26 @@ public class MainActivity extends Activity implements OnClickListener{
 	private void initListView() {
 		lvContentBody = (ListView) findViewById(R.id.lv_content_body);
 		lvContentBody.addHeaderView(viewHead);
-		
+//		if(mDatas==null||mDatas.size()==0){
+//			mDatas=new ArrayList<Project>();
+//			showMsg(this, R.string.empty_data);
+//		}
+		mAdapter=new ContentItemAdapter(this,mExcelItems);
+		lvContentBody.setAdapter(mAdapter);
+		findAllData();
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		findAllData();
+	}
+	
+	/**
+	 * 获取项目表中的数据，并且刷新里列表
+	 */
+	private void findAllData(){
 		mProjectDao=new ProjectDao(this);
 		mProjects=mProjectDao.query();
 		for (int i = 0; i < mProjects.size(); i++) {
@@ -95,12 +116,7 @@ public class MainActivity extends Activity implements OnClickListener{
 			excelItem.setProject(mProjects.get(i));
 			mExcelItems.add(excelItem);
 		}
-//		if(mDatas==null||mDatas.size()==0){
-//			mDatas=new ArrayList<Project>();
-//			showMsg(this, R.string.empty_data);
-//		}
-		
-		lvContentBody.setAdapter(new ContentItemAdapter(this,mExcelItems));
+		mAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -117,6 +133,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		case R.id.ll_history:
 			intent.setClass(MainActivity.this, HistoryActivity.class);
 			startActivity(intent);
+			break;
+		case R.id.tv_input:
+			//测试保存使用数据
+//			a
 			break;
 		default:
 			break;

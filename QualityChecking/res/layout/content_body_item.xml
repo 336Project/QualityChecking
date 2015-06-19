@@ -104,7 +104,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NG数:" />
+                android:text="NG           数:" />
 
             <com.ateam.qc.widget.CicleAddAndSubView
                 android:layout_width="wrap_content"

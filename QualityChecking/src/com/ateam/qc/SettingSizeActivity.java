@@ -3,6 +3,7 @@ package com.ateam.qc;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ateam.qc.application.MyApplication;
 import com.ateam.qc.dao.SizeDao;
 import com.ateam.qc.model.Size;
 import com.team.hbase.activity.HBaseActivity;
@@ -10,6 +11,7 @@ import com.team.hbase.adapter.HBaseAdapter;
 import com.team.hbase.adapter.ViewHolder;
 import com.team.hbase.widget.HAutoCompleteTextView;
 
+import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,6 +30,7 @@ public class SettingSizeActivity extends HBaseActivity {
 	private HAutoCompleteTextView mEditSizeName;
 	private SizeDao mSizeDao;
 	private SizeAdapter mAdapter;
+	private MyApplication mApplication;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,6 +39,11 @@ public class SettingSizeActivity extends HBaseActivity {
 		setBaseContentView(R.layout.activity_setting_size);
 		setActionBarTitle("型号设置");
 		init();
+		initApplication();
+	}
+	
+	private void initApplication() {
+		mApplication = (MyApplication) getApplication();
 	}
 	
 	/**
@@ -72,6 +80,7 @@ public class SettingSizeActivity extends HBaseActivity {
 		mDatas.clear();
 		mDatas.addAll(mSizeDao.query());
 		mAdapter.notifyDataSetChanged();
+		mApplication.setRefreshSize(true);
 	}
 	/**
 	 * 删除组别
@@ -87,6 +96,7 @@ public class SettingSizeActivity extends HBaseActivity {
 		mDatas.addAll(mSizeDao.query());
 		mAdapter.setHasChecked(new boolean[mDatas.size()]);
 		mAdapter.notifyDataSetChanged();
+		mApplication.setRefreshSize(true);
 	}
 	
 	private class SizeAdapter extends HBaseAdapter<Size>{

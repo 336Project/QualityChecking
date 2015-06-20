@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.ateam.qc.application.MyApplication;
 import com.ateam.qc.dao.ProjectDao;
 import com.ateam.qc.model.Project;
 import com.team.hbase.activity.HBaseActivity;
@@ -36,6 +37,7 @@ public class SettingProjectActivity extends HBaseActivity {
 	private ProjectDao mProjectDao;
 	
 	private ArrayList<String> mProNoList=new ArrayList<String>();
+	private MyApplication mApplication;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,6 +46,11 @@ public class SettingProjectActivity extends HBaseActivity {
 		setBaseContentView(R.layout.activity_setting_project);
 		setActionBarTitle("项目设置");
 		init();
+		initApplication();
+	}
+
+	private void initApplication() {
+		mApplication = (MyApplication)getApplication();
 	}
 
 	private void init() {
@@ -116,6 +123,7 @@ public class SettingProjectActivity extends HBaseActivity {
 			}
 		});
 		builder.create().show();
+		
 	}
 	
 	private void dismiss(DialogInterface dialog,boolean isDismiss){
@@ -137,6 +145,7 @@ public class SettingProjectActivity extends HBaseActivity {
 		pro.setShortName(shortName);
 		mProjectDao.save(pro);
 		notifyDataSetChanged();
+		mApplication.setRefreshProject(true);
 	}
 	/**
 	 * 删除项目
@@ -149,6 +158,7 @@ public class SettingProjectActivity extends HBaseActivity {
 			}
 		}
 		notifyDataSetChanged();
+		mApplication.setRefreshProject(true);
 	}
 	/**
 	 * 刷新列表

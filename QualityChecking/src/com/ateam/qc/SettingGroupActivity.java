@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.ateam.qc.application.MyApplication;
 import com.ateam.qc.dao.GroupDao;
 import com.ateam.qc.model.Group;
 import com.team.hbase.activity.HBaseActivity;
@@ -29,6 +30,7 @@ public class SettingGroupActivity extends HBaseActivity {
 	private HAutoCompleteTextView mEditGroupName;
 	private GroupDao mGroupDao;
 	private GroupAdapter mAdapter;
+	private MyApplication mApplication;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,8 +39,8 @@ public class SettingGroupActivity extends HBaseActivity {
 		setBaseContentView(R.layout.activity_setting_group);
 		setActionBarTitle("组别设置");
 		init();
+		initApplication();
 	}
-	
 	/**
 	 * 初始化
 	 */
@@ -53,6 +55,9 @@ public class SettingGroupActivity extends HBaseActivity {
 		}
 		mAdapter=new GroupAdapter(this, mDatas);
 		mListView.setAdapter(mAdapter);
+	}
+	private void initApplication() {
+		mApplication = (MyApplication)getApplication();
 	}
 	/**
 	 * 添加组别
@@ -73,6 +78,7 @@ public class SettingGroupActivity extends HBaseActivity {
 		mDatas.clear();
 		mDatas.addAll(mGroupDao.query());
 		mAdapter.notifyDataSetChanged();
+		mApplication.setRefreshGroup(true);
 	}
 	/**
 	 * 删除组别
@@ -88,6 +94,7 @@ public class SettingGroupActivity extends HBaseActivity {
 		mDatas.addAll(mGroupDao.query());
 		mAdapter.setHasChecked(new boolean[mDatas.size()]);
 		mAdapter.notifyDataSetChanged();
+		mApplication.setRefreshGroup(true);
 	}
 	
 	private class GroupAdapter extends HBaseAdapter<Group>{

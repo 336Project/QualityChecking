@@ -28,4 +28,12 @@ public class Size{
 	public void setName(String name) {
 		this.name = name;
 	}
+	@Override
+	public boolean equals(Object o) {
+		Size otherSize=(Size)o;
+		if(this.id==otherSize.getId()){
+			return true;
+		}
+		return false;
+	}
 }

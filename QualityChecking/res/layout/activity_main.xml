@@ -20,29 +20,51 @@
 
             <include layout="@layout/base_linearlayout" />
 
+            <!-- <ListView -->
+            <!-- android:id="@+id/lv_content_body" -->
+            <!-- android:layout_width="match_parent" -->
+            <!-- android:layout_height="0dp" -->
+            <!-- android:layout_weight="1" -->
+            <!-- android:paddingTop="8dp" -->
+            <!-- android:paddingLeft="8dp" -->
+            <!-- android:paddingRight="8dp" -->
+            <!-- android:divider="#00000000" -->
+            <!-- android:dividerHeight="8dp" > -->
+            <!-- </ListView> -->
 
-            <ListView
-                android:id="@+id/lv_content_body"
+            <ScrollView
+                android:id="@+id/scrollView1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingTop="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:divider="#00000000"
-                android:dividerHeight="8dp" >
-            </ListView>
+                android:layout_weight="1" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <include layout="@layout/content_head" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_form"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
             <TextView
                 android:id="@+id/tv_input"
                 android:layout_width="200dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/tv_input_selector"
                 android:gravity="center"
-                android:layout_gravity="center"
                 android:text="导出"
                 android:textColor="@color/white" />
         </LinearLayout>

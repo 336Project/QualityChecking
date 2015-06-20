@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ateam.qc.adapter.HistoryListAdapter;
 import com.ateam.qc.model.Excel;
+import com.ateam.qc.widget.ExcelItemLinearLayout;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,6 +51,7 @@ public class HistoryActivity extends Activity implements OnClickListener {
 		rl_right.setVisibility(View.INVISIBLE);
 		findViewById(R.id.tv_delete).setOnClickListener(this);
 		findViewById(R.id.tv_input).setOnClickListener(this);
+		
 	}
 
 	@Override

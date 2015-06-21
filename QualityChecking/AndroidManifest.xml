@@ -18,6 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:name="com.ateam.qc.application.MyApplication"
+        android:hardwareAccelerated="false"
          >
         <activity
             android:name=".MainActivity"

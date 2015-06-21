@@ -38,8 +38,8 @@ public class MyApplication extends Application{
 				.Builder()
 				.showImageForEmptyUri(R.drawable.empty_photo) 
 				.showImageOnFail(R.drawable.empty_photo) 
-				.cacheInMemory(true)
-				.cacheOnDisc(true)
+				.cacheInMemory(false)
+				.cacheOnDisc(false)
 				.build();
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration
 				.Builder(getApplicationContext())

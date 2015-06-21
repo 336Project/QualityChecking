@@ -1,9 +1,12 @@
 package com.ateam.qc.widget;
 
 import java.io.File;
+import java.net.URI;
 
 import com.ateam.qc.R;
+import com.ateam.qc.constant.Constant;
 import com.ateam.qc.image.ImagePagerActivity;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.team.hbase.utils.FileUtil;
 
 import android.app.Activity;
@@ -34,12 +37,13 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	private Spinner spSize;
 	private int size;
 	public static final int REQUEST_CODE_CAMERA = 1002;
-	public static final String SAVED_IMAGE_DIR_PATH = "kExcel/image";
 	private Activity activity;
 	private TextView tvTakePhoto;
 	private TextView tvLookPhoto;
 	private String photoFileName;
 	private Context context;
+	private Uri fileUri;
+	private String path;
 
 	public TextView getTvTakePhoto() {
 		return tvTakePhoto;
@@ -164,11 +168,13 @@ public class ExcelItemLinearLayout extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				FileUtil.getInstance().createSDDir(SAVED_IMAGE_DIR_PATH);
-				String fileName = getPhotoFileName() + ".jpg";
+				FileUtil.getInstance().createSDDir(Constant.SAVED_IMAGE_DIR_PATH);
+				String fileName = getPhotoFileName();
 				File file = FileUtil.getInstance().createFileInSDCard(
-						SAVED_IMAGE_DIR_PATH, fileName);
-				Uri fileUri = Uri.fromFile(file);
+						Constant.SAVED_IMAGE_DIR_PATH, fileName);
+				fileUri = Uri.fromFile(file);
+				path = fileUri.getPath();
+				Log.e("path", "path:"+path);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 				activity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
 			}
@@ -178,12 +184,7 @@ public class ExcelItemLinearLayout extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, ImagePagerActivity.class);
-				String[] urls = new String[] {"file:///mnt/sdcard/"+
-						SAVED_IMAGE_DIR_PATH
-						+ "/"
-						+ getPhotoFileName()
-						+ ".jpg" };
-//				String[] urls = new String[] {"http://i2.qhimg.com/dr/250_500_/t0171eddebe41b234b1.png?size=400x170"};
+				String[] urls = new String[] {"file://"+path};
 				intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls);
 				intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, 0);
 				activity.startActivity(intent);
@@ -215,4 +216,5 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	public void setPhotoFileName(String photoFileName) {
 		this.photoFileName = photoFileName;
 	}
+	
 }

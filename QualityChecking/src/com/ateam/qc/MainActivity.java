@@ -1,5 +1,6 @@
 package com.ateam.qc;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,12 +19,14 @@ import com.ateam.qc.model.Project;
 import com.ateam.qc.model.Size;
 import com.ateam.qc.utils.ExportExcel;
 import com.ateam.qc.widget.ExcelItemLinearLayout;
+import com.team.hbase.utils.FileUtil;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -68,6 +71,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	private TextView tvTime;
 	private EditText etFanhao;
 	public static final int REQUEST_CODE_CAMERA=1002;
+	private String creatTime;
+	private String excelName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +103,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	private void initExcelHead() {
 		mLinearlayoutForm = (LinearLayout) findViewById(R.id.ll_form);
 		tvTime = (TextView) findViewById(R.id.tv_time);
-		tvTime.setText(formatTime());
+		creatTime = formatTime();
+		excelName = "表"+creatTime;
+		tvTime.setText(excelName);
 		etFanhao = (EditText) findViewById(R.id.et_fanhao);
 		initSpinnerGroup();
 	}
@@ -117,14 +124,46 @@ public class MainActivity extends Activity implements OnClickListener {
 					project.getContent());
 			excelItemLinearLayout.setId(project.getId());
 			excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
-			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+project.getId());
+			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+project.getId()+".png");
+//			final Project finalProject =project;
+//			excelItemLinearLayout.getTvTakePhoto().setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//					FileUtil.getInstance().createSDDir(SAVED_IMAGE_DIR_PATH);
+//					String fileName = "h2h3" + ".jpg";
+//					File file = FileUtil.getInstance().createFileInSDCard(
+//							SAVED_IMAGE_DIR_PATH, fileName);
+//					Uri fileUri = Uri.fromFile(file);
+//					intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+//					startActivityForResult(intent, finalProject.getId());
+//				}
+//			});
 			
 			mExcelItemLinearLayouts.add(excelItemLinearLayout);
 			mLinearlayoutForm.addView(excelItemLinearLayout,
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		}
 	}
-
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Uri uri=null;
+		if (resultCode == RESULT_OK){
+				if (data != null && data.getData() != null) {
+					uri = data.getData();
+					Log.e("1", "1");
+				}
+				if (uri == null) {
+					Log.e("2", "2");
+//					uri = fileUri;
+				}
+		}
+		if(uri!=null){
+			Log.e("3", "3");
+		}else{
+			//Toast.makeText(this, "获取图片失败，请选择一张图片", Toast.LENGTH_SHORT).show();
+		}
+	}
 	/**
 	 * 初始化型号
 	 */
@@ -183,6 +222,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					.getText().toString().trim());
 			
 			excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
+			
 			mExcelItemDatas.put(excelItemLinearLayout.getId(), excelItem);
 		}
 	}
@@ -257,7 +297,8 @@ public class MainActivity extends Activity implements OnClickListener {
 					project.getContent());
 			excelItemLinearLayout.setId(project.getId());
 			excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
-
+			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+project.getId()+".png");
+			
 			if (mExcelItemDatas.containsKey(project.getId())) {
 				ExcelItem excelItem = mExcelItemDatas.get(project.getId());
 				excelItemLinearLayout.getAsViewCheck().setNum(
@@ -307,7 +348,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	private void saveExcel() {
 		Excel excel = new Excel();
-		excel.setTime(tvTime.getText().toString());
+		excel.setTime(creatTime);
 		excel.setGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition()).getName());
 		excel.setFanHao(etFanhao.getText().toString().trim());
 		
@@ -327,40 +368,18 @@ public class MainActivity extends Activity implements OnClickListener {
 			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
 					.getText().toString().trim());
 			excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
+			excelItem.setPicturePath(excelItemLinearLayout.getPhotoFileName());
 			excelItemsList.add(excelItem);
 		}
 		
 		excel.setExcelItemsList(excelItemsList);
-		ExportExcel.export(this, excel);
+		ExportExcel.export(this, excel,excelName);
 	}
 
 	public String formatTime() {
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-				"表yyyyMMddHHmmss");
+				"yyyyMMddHHmm");
 		return simpleDateFormat.format(date);
-	}
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Uri uri=null;
-		if (resultCode == RESULT_OK){
-			if(requestCode==REQUEST_CODE_CAMERA){
-				if (data != null && data.getData() != null) {
-					uri = data.getData();
-					Log.e("hehe", "hehe");
-				}
-				if (uri == null) {
-//					uri = fileUri;
-				}
-			}
-		}
-		if(uri!=null){
-			Intent intent=new Intent();
-			intent.setData(uri);
-			setResult(RESULT_OK, intent);
-			finish();
-		}else{
-			//Toast.makeText(this, "获取图片失败，请选择一张图片", Toast.LENGTH_SHORT).show();
-		}
 	}
 }

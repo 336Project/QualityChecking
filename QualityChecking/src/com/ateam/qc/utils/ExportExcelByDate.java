@@ -25,16 +25,18 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
-
-public class ExportExcel {
+/**
+ * 根据日期范围导出汇总的Excel
+ * @author Administrator
+ */
+public class ExportExcelByDate {
 	private static Context mContext;
 
 	// 导出数据
-	public static void export(Context context, Excel excel, String excelName) {
+	public static void export(Context context, Excel excel,String excelName) {
 		mContext = context;
 		WritableWorkbook wwb = null;
 		try {
-
 			File destDir = new File(Environment.getExternalStorageDirectory()
 					.getAbsolutePath()
 					+ File.separator
@@ -42,8 +44,6 @@ public class ExportExcel {
 			if (!destDir.exists()) {
 				destDir.mkdirs();
 			}
-			// FileUtil.getInstance().createFileInSDCard(Constant.SAVED_EXCEL_DIR_PATH,
-			// excelName+".xls")
 			// 首先要使用Workbook类的工厂方法创建一个可写入的工作薄(Workbook)对象
 			wwb = Workbook.createWorkbook(new File(Environment
 					.getExternalStorageDirectory() + "/" +  Constant.SAVED_EXCEL_DIR_PATH+"/"+excelName + ".xls"));
@@ -52,60 +52,50 @@ public class ExportExcel {
 		}
 		if (wwb != null) {
 			// 创建一个可写入的工作表
-			// Workbook的createSheet方法有两个参数，第一个是工作表的名称，第二个是工作表在工作薄中的位置
 			WritableSheet ws = wwb.createSheet("数量统计", 0);
 			WritableSheet wsPicture = wwb.createSheet("照片", 1);
-
+			
 			ArrayList<ExcelItem> excelItemsList = excel.getExcelItemsList();
-			int weight = 1;
+			int weight=1;
 			for (int i = 0; i < excelItemsList.size(); i++) {
 				ExcelItem excelItem = excelItemsList.get(i);
-				boolean fileExist = FileUtil.getInstance().isFileExist(
-						Constant.SAVED_IMAGE_DIR_PATH,
-						excelItem.getPicturePath());
-				if (fileExist) {
-					String filePath = FileUtil.getInstance().getFilePath(
-							Constant.SAVED_IMAGE_DIR_PATH,
-							excelItem.getPicturePath());
+				boolean fileExist = FileUtil.getInstance().isFileExist(Constant.SAVED_IMAGE_DIR_PATH, excelItem.getPicturePath());
+				if(fileExist){
+					String filePath = FileUtil.getInstance().getFilePath(Constant.SAVED_IMAGE_DIR_PATH, excelItem.getPicturePath());
 					File imageData = new File(filePath);
-					WritableImage image = new WritableImage(1, 4 * weight + 16
-							* (weight - 1), 10, 16, imageData);
+					WritableImage image =new WritableImage(1, 4*weight+16*(weight-1), 10, 16, imageData );
 					try {
-						WritableCellFormat wc = new WritableCellFormat();
+						WritableCellFormat wc = new WritableCellFormat(); 
 						wc.setAlignment(Alignment.CENTRE);
-						Label labelHead = new Label(1, 5 * weight + 16
-								* (weight), excelItem.getSize().getName() + "　"
-								+ excelItem.getProject().getContent(), wc);
+						Label labelHead = new Label(1, 5*weight+16*(weight),excelItem.getSize().getName()+"　"+excelItem.getProject().getContent() ,wc);
 						wsPicture.addCell(labelHead);
 					} catch (RowsExceededException e) {
 						e.printStackTrace();
 					} catch (WriteException e) {
 						e.printStackTrace();
 					}
-
-					wsPicture.addImage(image);
-					weight += 1;
+					
+					wsPicture.addImage(image );
+					weight+=1;
 				}
 			}
-			// 添加表头
-			try {
-				ws.mergeCells(0, 0, 7, 0);
-				WritableCellFormat wc = new WritableCellFormat();
-				wc.setAlignment(Alignment.CENTRE);
-				Label labelHead = new Label(0, 0, excel.getGroup()
-						+ excel.getFanHao() + "查核表" + "　　　" + excel.getTime(),
-						wc);
-				ws.addCell(labelHead);
-			} catch (RowsExceededException e1) {
-				e1.printStackTrace();
-			} catch (WriteException e1) {
-				e1.printStackTrace();
-			}
+			//添加表头
+			//日期范围表 不需要添加表头
+//			try {
+//				ws.mergeCells(0, 0, 7, 0);
+//				WritableCellFormat wc = new WritableCellFormat(); 
+//				wc.setAlignment(Alignment.CENTRE);
+//				Label labelHead = new Label(0, 0, excel.getGroup()+excel.getFanHao()+"查核表"+"　　　"+excel.getTime(),wc);
+//				ws.addCell(labelHead);
+//			} catch (RowsExceededException e1) {
+//				e1.printStackTrace();
+//			} catch (WriteException e1) {
+//				e1.printStackTrace();
+//			}
 			// 下面开始添加单元格
-			String[] topic = { "型号", "查核次数", "NG数", "检查数量", "不合格数量", "不良率",
-					"项目", "处理方式", };
+			String[] topic = { "型号", "组别", "日期", "番号","不良率"};
 			for (int i = 0; i < topic.length; i++) {
-				Label labelC = new Label(i, 1, topic[i]);
+				Label labelC = new Label(i, 0, topic[i]);
 				try {
 					// 将生成的单元格添加到工作表中
 					ws.addCell(labelC);
@@ -116,31 +106,28 @@ public class ExportExcel {
 				}
 			}
 			ArrayList<String> li;
-
+			
 			for (int j = 0; j < excelItemsList.size(); j++) {
-
+				
 				ExcelItem excelItem = excelItemsList.get(j);
 				li = new ArrayList<String>();
-
+				
 				li.add(excelItem.getSize().getName());
-				li.add(excelItem.getExamineNum() + "");
-				li.add(excelItem.getNgNum() + "");
-				li.add(excelItem.getCheckNum() + "");
-				li.add(excelItem.getUnqualifiedNum() + "");
-				if (excelItem.getCheckNum() == 0
-						|| excelItem.getUnqualifiedNum() == 0) {
+				li.add(excel.getGroup());
+				li.add(excel.getTime());
+				li.add(excel.getFanHao());
+				li.add(excelItem.getUnqualifiedNum()+"");
+				if(excelItem.getCheckNum()==0||excelItem.getUnqualifiedNum()==0){
 					li.add("0%");
-				} else {
-					li.add(excelItem.getUnqualifiedNum()
-							/ excelItem.getCheckNum() + "%");
 				}
-				li.add(excelItem.getProject().getContent());
-				li.add(excelItem.getProcessMode());
-
+				else{
+					li.add(excelItem.getUnqualifiedNum()/excelItem.getCheckNum()+"%");
+				}
+				
 				System.out.println(li.size());
 				int k = 0;
 				for (String l : li) {
-					Label labelC = new Label(k, j + 2, l);
+					Label labelC = new Label(k, j + 1, l);
 					k++;
 					try {
 						// 将生成的单元格添加到工作表中
@@ -159,16 +146,13 @@ public class ExportExcel {
 				wwb.write();
 				// 关闭资源，释放内存
 				wwb.close();
-				Toast.makeText(mContext, "生成excel成功！", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(mContext, "生成excel成功！", Toast.LENGTH_SHORT).show();
 			} catch (IOException e) {
 				e.printStackTrace();
-				Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT).show();
 			} catch (WriteException e) {
 				e.printStackTrace();
-				Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT).show();
 			}
 		} else {
 			Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT).show();

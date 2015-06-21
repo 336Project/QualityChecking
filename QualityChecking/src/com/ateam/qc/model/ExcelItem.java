@@ -15,7 +15,14 @@ public class ExcelItem {
 	private int ngNum;//NG数量
 	private String processMode;//处理方式
 	private String[] pictureArray; //照片
+	private String picturePath;
 	
+	public String getPicturePath() {
+		return picturePath;
+	}
+	public void setPicturePath(String picturePath) {
+		this.picturePath = picturePath;
+	}
 	public int getId() {
 		return id;
 	}

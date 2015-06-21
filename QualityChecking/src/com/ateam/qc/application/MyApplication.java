@@ -4,6 +4,7 @@ import com.ateam.qc.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import android.app.Application;
 
@@ -40,6 +41,7 @@ public class MyApplication extends Application{
 				.showImageOnFail(R.drawable.empty_photo) 
 				.cacheInMemory(false)
 				.cacheOnDisc(false)
+				.imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
 				.build();
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration
 				.Builder(getApplicationContext())

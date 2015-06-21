@@ -103,7 +103,7 @@ public class PictureUtils {
 				file.createNewFile();
 				BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file));
 
-				bitmap.compress(Bitmap.CompressFormat.JPEG, compressVal, baos);
+				bitmap.compress(Bitmap.CompressFormat.PNG, compressVal, baos);
 				os.write(baos.toByteArray());
 
 				os.flush();

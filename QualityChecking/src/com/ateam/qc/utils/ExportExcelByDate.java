@@ -120,7 +120,7 @@ public class ExportExcelByDate {
 					li.add("0%");
 				}
 				else{
-					li.add((excelItem.getUnqualifiedNum()/excelItem.getCheckNum())*100+"%");
+					li.add(SysUtil.format(((float)excelItem.getUnqualifiedNum()/excelItem.getCheckNum())*100)+"%");
 				}
 				
 				System.out.println(li.size());

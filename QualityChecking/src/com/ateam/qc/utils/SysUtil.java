@@ -1,6 +1,7 @@
 package com.ateam.qc.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -69,5 +70,19 @@ public class SysUtil {
 	    if (be <= 0)
 	        be = 1; 
 		return be;
+	}
+	
+	/**
+	 * 
+	 * @author 李晓伟
+	 * 2014-8-30 下午2:29:01
+	 * @param d
+	 * @return
+	 * @TODO 四舍五入保留两位
+	 */
+	public static double format(double d){
+		BigDecimal b = new BigDecimal(d);
+		d=b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		return d;
 	}
 }

@@ -10,8 +10,8 @@
 
         <ImageView
             android:id="@+id/sub_btn_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
 
         <TextView
             android:id="@+id/num_text_id"
@@ -20,13 +20,14 @@
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
+            android:layout_gravity="center_vertical"
             android:text="0"
             android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/add_btn_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
     </LinearLayout>
 
 </LinearLayout>

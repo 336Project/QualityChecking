@@ -131,8 +131,8 @@ public class ExportExcel {
 						|| excelItem.getUnqualifiedNum() == 0) {
 					li.add("0%");
 				} else {
-					li.add((excelItem.getUnqualifiedNum()
-							/ excelItem.getCheckNum())*100 + "%");
+					li.add(SysUtil.format(((float)excelItem.getUnqualifiedNum()
+							/excelItem.getCheckNum())*100) + "%");
 				}
 				li.add(excelItem.getProject().getContent());
 				li.add(excelItem.getProcessMode());

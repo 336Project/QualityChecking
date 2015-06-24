@@ -75,11 +75,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="检查数量:" />
 
             <com.ateam.qc.widget.CicleAddAndSubView
@@ -102,18 +104,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical" >
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="right"
                 android:text="不合格数量:" />
 
             <com.ateam.qc.widget.CicleAddAndSubView
                 android:id="@+id/asView_unqualified"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                 />
         </LinearLayout>
     </LinearLayout>
 
@@ -125,11 +131,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="查核次数:" />
 
             <com.ateam.qc.widget.CicleAddAndSubView
@@ -152,18 +160,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical" >
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="right"
                 android:text="NG          数:" />
 
             <com.ateam.qc.widget.CicleAddAndSubView
                 android:id="@+id/asView_ng"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                />
         </LinearLayout>
     </LinearLayout>
 

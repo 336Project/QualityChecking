@@ -216,5 +216,13 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	public void setPhotoFileName(String photoFileName) {
 		this.photoFileName = photoFileName;
 	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 	
 }

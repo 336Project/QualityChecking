@@ -11,6 +11,7 @@
     android:paddingBottom="5dp"
     android:orientation="horizontal" 
     android:gravity="center_vertical"
+    android:descendantFocusability="blocksDescendants"
     >
     
 	<CheckBox 
@@ -20,10 +21,11 @@
 	    style="@style/MyCheckBox"
 	    />
 	<TextView 
-	    android:id="@+id/tv_history_name"
+	    android:id="@+id/tv_historyName"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_weight="1"
+	    android:gravity="center"
 	    />
 </LinearLayout>
 </RelativeLayout>

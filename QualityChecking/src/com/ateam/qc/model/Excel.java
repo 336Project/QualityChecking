@@ -2,18 +2,25 @@ package com.ateam.qc.model;
 
 import java.util.ArrayList;
 
+import net.tsz.afinal.annotation.sqlite.Id;
 import net.tsz.afinal.annotation.sqlite.Table;
+import net.tsz.afinal.annotation.sqlite.Transient;
 
 import android.app.ListActivity;
 
 @Table(name=Excel.TABLE_EXCEL)
 public class Excel {
-	protected static final String TABLE_EXCEL="tb_excel";
+	@Transient
+	public static final String TABLE_EXCEL="tb_excel";
+	
+	@Id
 	private int id; //ExcelId
 	private int flowId;//流水号，唯一标示
 	private String group;//组别
 	private String time;//日期
 	private String fanHao;//番号
+	
+	@Transient
 	private ArrayList<ExcelItem> excelItemsList = new ArrayList<ExcelItem>(); //记录列表
 	public int getId() {
 		return id;

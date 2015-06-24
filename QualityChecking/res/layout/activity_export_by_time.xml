@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="300dp"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@android:color/white"
+    tools:context=".ExportByTimeActivity" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/deepBlue"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:text="选择导出时间" />
+    
+    <EditText 
+        android:id="@+id/et_beginTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="请输入开始时间"/>
+    
+    <EditText 
+        android:id="@+id/et_endTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="请输入结束时间"/>
+    
+    <Button 
+        android:id="@+id/btn_export"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/tv_look_photo_selector"
+        android:textColor="@color/white"
+        android:text="导出"/>
+
+</LinearLayout>

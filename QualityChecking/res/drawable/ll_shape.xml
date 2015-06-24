@@ -3,4 +3,6 @@
 	<stroke android:width="0.5dp"
 	    android:color="#EEEEEE"
 	    />
+	<solid
+        android:color="@android:color/white"/><!-- 填充的颜色 -->
 </shape>

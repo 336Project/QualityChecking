@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ateam.qc.HistoryActivity" >
+    tools:context="com.ateam.qc.activity.HistoryActivity" >
 
     <include layout="@layout/base_linearlayout" />
 
@@ -21,7 +21,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="当前没有历史记录"
                 android:textColor="#CACACA"
                 android:textSize="18sp" />
         </LinearLayout>

@@ -1,4 +1,4 @@
-package com.ateam.qc;
+package com.ateam.qc.activity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -17,6 +17,11 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.ateam.qc.R;
+import com.ateam.qc.R.drawable;
+import com.ateam.qc.R.id;
+import com.ateam.qc.R.layout;
+import com.ateam.qc.R.string;
 import com.ateam.qc.application.MyApplication;
 import com.ateam.qc.dao.ProjectDao;
 import com.ateam.qc.model.Project;

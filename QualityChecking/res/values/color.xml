@@ -13,4 +13,8 @@
     <color name="green_textview_press">#17C624</color>
     <color name="orange_textview_normal">#FC8943</color>
     <color name="orange_textview_press">#EA7E3E</color>
+    <color name="black75PercentColor">#c0c0c0</color>
+    <color name="babyBlueColor">#bedce6</color>
+    <color name="tealColor">#1ca0aa</color>
+    <color name="deepBlue">#3498DB</color>
 </resources>

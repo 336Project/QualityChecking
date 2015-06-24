@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import com.ateam.qc.constant.Constant;
 import com.ateam.qc.model.Excel;
@@ -33,7 +34,7 @@ public class ExportExcelByDate {
 	private static Context mContext;
 
 	// 导出数据
-	public static void export(Context context, Excel excel,String excelName) {
+	public static void export(Context context, ArrayList<ExcelItem> AllExcelItem,String excelName) {
 		mContext = context;
 		WritableWorkbook wwb = null;
 		try {
@@ -53,12 +54,11 @@ public class ExportExcelByDate {
 		if (wwb != null) {
 			// 创建一个可写入的工作表
 			WritableSheet ws = wwb.createSheet("数量统计", 0);
-			WritableSheet wsPicture = wwb.createSheet("照片", 1);
+//			WritableSheet wsPicture = wwb.createSheet("照片", 1);
 			
-			ArrayList<ExcelItem> excelItemsList = excel.getExcelItemsList();
 			int weight=1;
-			for (int i = 0; i < excelItemsList.size(); i++) {
-				ExcelItem excelItem = excelItemsList.get(i);
+			for (int i = 0; i < AllExcelItem.size(); i++) {
+				ExcelItem excelItem = AllExcelItem.get(i);
 				boolean fileExist = FileUtil.getInstance().isFileExist(Constant.SAVED_IMAGE_DIR_PATH, excelItem.getPicturePath());
 				if(fileExist){
 					String filePath = FileUtil.getInstance().getFilePath(Constant.SAVED_IMAGE_DIR_PATH, excelItem.getPicturePath());
@@ -67,15 +67,15 @@ public class ExportExcelByDate {
 					try {
 						WritableCellFormat wc = new WritableCellFormat(); 
 						wc.setAlignment(Alignment.CENTRE);
-						Label labelHead = new Label(1, 5*weight+16*(weight),excelItem.getSize().getName()+"　"+excelItem.getProject().getContent() ,wc);
-						wsPicture.addCell(labelHead);
+//						Label labelHead = new Label(1, 5*weight+16*(weight),excelItem.getSizeName()+"　"+excelItem.getPorjectName() ,wc);
+//						wsPicture.addCell(labelHead);
 					} catch (RowsExceededException e) {
 						e.printStackTrace();
 					} catch (WriteException e) {
 						e.printStackTrace();
 					}
 					
-					wsPicture.addImage(image );
+//					wsPicture.addImage(image );
 					weight+=1;
 				}
 			}
@@ -107,21 +107,20 @@ public class ExportExcelByDate {
 			}
 			ArrayList<String> li;
 			
-			for (int j = 0; j < excelItemsList.size(); j++) {
+			for (int j = 0; j < AllExcelItem.size(); j++) {
 				
-				ExcelItem excelItem = excelItemsList.get(j);
+				ExcelItem excelItem = AllExcelItem.get(j);
 				li = new ArrayList<String>();
 				
-				li.add(excelItem.getSize().getName());
-				li.add(excel.getGroup());
-				li.add(excel.getTime());
-				li.add(excel.getFanHao());
-				li.add(excelItem.getUnqualifiedNum()+"");
+				li.add(excelItem.getSizeName());
+				li.add(excelItem.getMyGroup());
+				li.add(excelItem.getTime());
+				li.add(excelItem.getFanHao());
 				if(excelItem.getCheckNum()==0||excelItem.getUnqualifiedNum()==0){
 					li.add("0%");
 				}
 				else{
-					li.add(excelItem.getUnqualifiedNum()/excelItem.getCheckNum()+"%");
+					li.add((excelItem.getUnqualifiedNum()/excelItem.getCheckNum())*100+"%");
 				}
 				
 				System.out.println(li.size());

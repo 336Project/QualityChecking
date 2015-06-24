@@ -1,4 +1,9 @@
-package com.ateam.qc;
+package com.ateam.qc.activity;
+
+import com.ateam.qc.R;
+import com.ateam.qc.R.drawable;
+import com.ateam.qc.R.id;
+import com.ateam.qc.R.layout;
 
 import android.app.Activity;
 import android.content.Intent;

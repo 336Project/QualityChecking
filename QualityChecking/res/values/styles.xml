@@ -26,5 +26,15 @@
         <item name="android:paddingLeft">6dip</item>
         <item name="android:maxHeight">10.0dip</item>
     </style>
+    <style name="SelectDate_dialog_theme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="my_dialog_theme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 
 </resources>

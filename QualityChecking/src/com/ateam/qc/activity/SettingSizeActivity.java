@@ -1,8 +1,13 @@
-package com.ateam.qc;
+package com.ateam.qc.activity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ateam.qc.R;
+import com.ateam.qc.R.drawable;
+import com.ateam.qc.R.id;
+import com.ateam.qc.R.layout;
+import com.ateam.qc.R.string;
 import com.ateam.qc.application.MyApplication;
 import com.ateam.qc.dao.SizeDao;
 import com.ateam.qc.model.Size;

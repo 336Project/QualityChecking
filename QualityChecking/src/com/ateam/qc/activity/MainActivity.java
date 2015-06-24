@@ -1,4 +1,4 @@
-package com.ateam.qc;
+package com.ateam.qc.activity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -7,23 +7,32 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.ateam.qc.R;
+import com.ateam.qc.R.id;
+import com.ateam.qc.R.layout;
 import com.ateam.qc.adapter.ContentItemAdapter;
 import com.ateam.qc.application.MyApplication;
+import com.ateam.qc.dao.ExcelDao;
+import com.ateam.qc.dao.ExcelItemDao;
 import com.ateam.qc.dao.GroupDao;
 import com.ateam.qc.dao.ProjectDao;
 import com.ateam.qc.dao.SizeDao;
 import com.ateam.qc.model.Excel;
 import com.ateam.qc.model.ExcelItem;
+import com.ateam.qc.model.ExcelSave;
 import com.ateam.qc.model.Group;
 import com.ateam.qc.model.Project;
 import com.ateam.qc.model.Size;
 import com.ateam.qc.utils.ExportExcel;
+import com.ateam.qc.utils.MyToast;
 import com.ateam.qc.widget.ExcelItemLinearLayout;
 import com.team.hbase.utils.FileUtil;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -347,7 +356,24 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 	private void saveExcel() {
+		if(mProjects.size()==0){
+			MyToast.showShort(this, "暂无需保存数据!");
+			return;
+		}
+		ExcelDao excelDao=new ExcelDao(this);
+		ExcelItemDao excelItemDao=new ExcelItemDao(this);
+		
+		SharedPreferences flowId=getSharedPreferences("flowId", Activity.MODE_PRIVATE);
+		int mFlowId=flowId.getInt("flowId", 0);
+		ExcelSave excelSave = new ExcelSave();
+		excelSave.setFlowId(mFlowId);
+		excelSave.setTime(creatTime);
+		excelSave.setMyGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition()).getName());
+		excelSave.setFanHao(etFanhao.getText().toString().trim());
+		excelDao.save(excelSave);
+		
 		Excel excel = new Excel();
+		excel.setFlowId(mFlowId);
 		excel.setTime(creatTime);
 		excel.setGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition()).getName());
 		excel.setFanHao(etFanhao.getText().toString().trim());
@@ -357,7 +383,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		for (int i = 0; i < mExcelItemLinearLayouts.size(); i++) {
 			ExcelItemLinearLayout excelItemLinearLayout = mExcelItemLinearLayouts.get(i);
 			ExcelItem excelItem = new ExcelItem();
+			excelItem.setFlowId(mFlowId);
 			excelItem.setProject(mProjects.get(i));
+			excelItem.setPorjectName(mProjects.get(i).getContent());
 			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
 					.getNum());
 			excelItem.setUnqualifiedNum(excelItemLinearLayout
@@ -368,12 +396,21 @@ public class MainActivity extends Activity implements OnClickListener {
 			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
 					.getText().toString().trim());
 			excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
+			excelItem.setSizeName(mSizes.get(excelItemLinearLayout.getSize()).getName());
 			excelItem.setPicturePath(excelItemLinearLayout.getPhotoFileName());
+			excelItem.setPicture(excelItemLinearLayout.getPath());
+			excelItem.setTime(creatTime);
+			excelItem.setMyGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition()).getName());
+			excelItem.setFanHao(etFanhao.getText().toString().trim());
 			excelItemsList.add(excelItem);
+			excelItemDao.save(excelItem);
 		}
-		
 		excel.setExcelItemsList(excelItemsList);
 		ExportExcel.export(this, excel,excelName);
+		Editor edit = flowId.edit();
+		mFlowId=mFlowId+1;
+		edit.putInt("flowId", mFlowId);
+		edit.commit();
 	}
 
 	public String formatTime() {

@@ -10,5 +10,7 @@
     <string name="title_activity_set">SetActivity</string>
     <string name="title_activity_history">HistoryActivity</string>
     <string name="viewpager_indicator">%1$d/%2$d</string>
+    <string name="title_activity_history_detail">HistoryDetailActivity</string>
+    <string name="title_activity_export_by_time">ExportByTimeActivity</string>
 
 </resources>

@@ -84,6 +84,7 @@ public class SettingGroupActivity extends HBaseActivity {
 		mDatas.addAll(mGroupDao.query());
 		mAdapter.notifyDataSetChanged();
 		mApplication.setRefreshGroup(true);
+		showMsg(SettingGroupActivity.this, "添加成功");
 	}
 	/**
 	 * 删除组别
@@ -100,6 +101,7 @@ public class SettingGroupActivity extends HBaseActivity {
 		mAdapter.setHasChecked(new boolean[mDatas.size()]);
 		mAdapter.notifyDataSetChanged();
 		mApplication.setRefreshGroup(true);
+		showMsg(SettingGroupActivity.this, "删除成功");
 	}
 	
 	private class GroupAdapter extends HBaseAdapter<Group>{

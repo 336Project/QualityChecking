@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="HardcodedText">
+        <ignore path="res/layout/activity_setting_project.xml" />
+    </issue>
     <issue id="RtlHardcoded" severity="ignore" />
 </lint>

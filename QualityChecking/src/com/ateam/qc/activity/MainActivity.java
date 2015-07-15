@@ -5,7 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.ateam.qc.R;
 import com.ateam.qc.R.id;
@@ -58,30 +61,41 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements OnClickListener {
 
 	private DrawerLayout drawerLayout;
-	private ArrayAdapter<String> adapter;
-	private ListView lvContentBody;
-	private View viewHead;
+
 	private GroupDao mGroupDao;
 	private List<Group> mGroups;
 
-	private ArrayList<ExcelItem> mExcelItems = new ArrayList<ExcelItem>();
 	private ProjectDao mProjectDao;
 	private List<Project> mProjects;
-	private String[] mGroupStrings;
+
 	private Spinner mSpinnerGroup;
 	private LinearLayout mLinearlayoutForm;
 	private HashMap<Integer, ExcelItem> mExcelItemDatas = new HashMap<Integer, ExcelItem>();
 	private ArrayList<ExcelItemLinearLayout> mExcelItemLinearLayouts = new ArrayList<ExcelItemLinearLayout>();
 	private SizeDao mSizeDao;
 	private List<Size> mSizes;
+	/**
+	 * Spinner适配器需要的数组对象 1.Group 2.Project 3.Size
+	 */
+	private String[] mGroupStrings;
+	private String[] mProjectStrings;
 	private String[] mSizeStrings;
+	/**
+	 * Spinner适配器
+	 */
+	private ArrayAdapter<String> adapter;
 	private ArrayAdapter<String> mSizeAdapter;
+	private ArrayAdapter<String> mProjectAdapter;
 	private MyApplication mApplication;
 	private TextView tvTime;
 	private EditText etFanhao;
-	public static final int REQUEST_CODE_CAMERA=1002;
+	public static final int REQUEST_CODE_CAMERA = 1002;
 	private String creatTime;
 	private String excelName;
+	/**
+	 * 项目序号
+	 */
+	private int projectNum = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +109,13 @@ public class MainActivity extends Activity implements OnClickListener {
 		tvTitlename.setText("表格录入");
 		RelativeLayout rlRight = (RelativeLayout) findViewById(R.id.rl_right);
 		rlRight.setVisibility(View.INVISIBLE);
+		findViewById(R.id.tv_add).setOnClickListener(this);
 		findViewById(R.id.tv_input).setOnClickListener(this);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		findViewById(R.id.rl_left).setOnClickListener(this);
 		findViewById(R.id.ll_set).setOnClickListener(this);
 		findViewById(R.id.ll_history).setOnClickListener(this);
-		
-		
+
 		initExcelHead();
 		initExcelBody();
 	}
@@ -113,66 +127,91 @@ public class MainActivity extends Activity implements OnClickListener {
 		mLinearlayoutForm = (LinearLayout) findViewById(R.id.ll_form);
 		tvTime = (TextView) findViewById(R.id.tv_time);
 		creatTime = formatTime();
-		excelName = "表"+creatTime;
+		excelName = "表" + creatTime;
 		tvTime.setText(excelName);
 		etFanhao = (EditText) findViewById(R.id.et_fanhao);
 		initSpinnerGroup();
 	}
 
 	/**
-	 * 表体
+	 * 初始化表体
 	 */
 	private void initExcelBody() {
 		initSpinnerSize();
+		initSpinnerProject();
 		mProjectDao = new ProjectDao(this);
 		mProjects = mProjectDao.query();
-		for (Project project : mProjects) {
-			ExcelItemLinearLayout excelItemLinearLayout = new ExcelItemLinearLayout(
-					this,MainActivity.this);
-			excelItemLinearLayout.getTvItemDescription().setText(
-					project.getContent());
-			excelItemLinearLayout.setId(project.getId());
-			excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
-			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+project.getId()+".png");
-//			final Project finalProject =project;
-//			excelItemLinearLayout.getTvTakePhoto().setOnClickListener(new OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//					FileUtil.getInstance().createSDDir(SAVED_IMAGE_DIR_PATH);
-//					String fileName = "h2h3" + ".jpg";
-//					File file = FileUtil.getInstance().createFileInSDCard(
-//							SAVED_IMAGE_DIR_PATH, fileName);
-//					Uri fileUri = Uri.fromFile(file);
-//					intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-//					startActivityForResult(intent, finalProject.getId());
-//				}
-//			});
-			
-			mExcelItemLinearLayouts.add(excelItemLinearLayout);
-			mLinearlayoutForm.addView(excelItemLinearLayout,
-					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		}
+
+		ExcelItemLinearLayout excelItemLinearLayout = new ExcelItemLinearLayout(
+				this, MainActivity.this);
+		excelItemLinearLayout.setId(projectNum);
+		excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
+		excelItemLinearLayout.getSpProject().setAdapter(mProjectAdapter);
+		excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString()
+				.trim()
+				+ excelItemLinearLayout.getId() + ".png");
+
+		mExcelItemLinearLayouts.add(excelItemLinearLayout);
+		mLinearlayoutForm.addView(excelItemLinearLayout,
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+
+		// for (Project project : mProjects) {
+		// ExcelItemLinearLayout excelItemLinearLayout = new
+		// ExcelItemLinearLayout(
+		// this,MainActivity.this);
+		// excelItemLinearLayout.getTvItemDescription().setText(
+		// project.getContent());
+		// excelItemLinearLayout.setId(project.getId());
+		// excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
+		// excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+project.getId()+".png");
+		//
+		// mExcelItemLinearLayouts.add(excelItemLinearLayout);
+		// mLinearlayoutForm.addView(excelItemLinearLayout,
+		// LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		// }
 	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Uri uri=null;
-		if (resultCode == RESULT_OK){
-				if (data != null && data.getData() != null) {
-					uri = data.getData();
-					Log.e("1", "1");
-				}
-				if (uri == null) {
-					Log.e("2", "2");
-//					uri = fileUri;
-				}
+		Uri uri = null;
+		if (resultCode == RESULT_OK) {
+			if (data != null && data.getData() != null) {
+				uri = data.getData();
+				Log.e("1", "1");
+			}
+			if (uri == null) {
+				Log.e("2", "2");
+				// uri = fileUri;
+			}
 		}
-		if(uri!=null){
+		if (uri != null) {
 			Log.e("3", "3");
-		}else{
-			//Toast.makeText(this, "获取图片失败，请选择一张图片", Toast.LENGTH_SHORT).show();
+		} else {
+			// Toast.makeText(this, "获取图片失败，请选择一张图片",
+			// Toast.LENGTH_SHORT).show();
 		}
 	}
+
+	/**
+	 * 初始化项目内容
+	 */
+	private void initSpinnerProject() {
+		mProjectDao = new ProjectDao(this);
+		mProjects = mProjectDao.query();
+		if (mProjects == null || mProjects.size() == 0) {
+			mProjects = new ArrayList<Project>();
+		}
+		mProjectStrings = new String[mProjects.size()];
+		for (int i = 0; i < mProjects.size(); i++) {
+			mProjectStrings[i] = new String(mProjects.get(i).getContent());
+			Log.e("mProjectStrings[i]", "mProjectStrings[i]:"+mProjectStrings[i]);
+		}
+		mProjectAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, mProjectStrings);
+		mProjectAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	}
+
 	/**
 	 * 初始化型号
 	 */
@@ -191,7 +230,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		mSizeAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	}
-
 
 	/**
 	 * 初始化表头的组别
@@ -229,9 +267,14 @@ public class MainActivity extends Activity implements OnClickListener {
 			excelItem.setNgNum(excelItemLinearLayout.getAsViewNg().getNum());
 			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
 					.getText().toString().trim());
-			
-			excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
-			
+			if (mProjects.size() != 0) {
+				excelItem.setProject(mProjects.get(excelItemLinearLayout
+						.getProjectSize()));
+			}
+			if (mSizes.size() != 0) {
+				excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
+			}
+
 			mExcelItemDatas.put(excelItemLinearLayout.getId(), excelItem);
 		}
 	}
@@ -252,6 +295,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			mApplication.setRefreshSize(false);
 		}
 		if (mApplication.isRefreshProject()) {
+			Log.e("变化", "变化");
 			findAllProject();
 			mApplication.setRefreshProject(false);
 		}
@@ -281,9 +325,10 @@ public class MainActivity extends Activity implements OnClickListener {
 		if (!mApplication.isRefreshProject()) {
 			for (ExcelItemLinearLayout excelItemLinearLayout : mExcelItemLinearLayouts) {
 				excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
-				
-				ExcelItem excelItem = mExcelItemDatas.get(excelItemLinearLayout.getId());
-				int sizeIndexOf=mSizes.indexOf(excelItem.getSize());
+
+				ExcelItem excelItem = mExcelItemDatas.get(excelItemLinearLayout
+						.getId());
+				int sizeIndexOf = mSizes.indexOf(excelItem.getSize());
 				if (sizeIndexOf > -1) {
 					excelItemLinearLayout.getSpSize().setSelection(sizeIndexOf);
 				}
@@ -295,41 +340,106 @@ public class MainActivity extends Activity implements OnClickListener {
 	 * 获取项目表中的数据，并且刷新里列表
 	 */
 	private void findAllProject() {
-		mProjectDao = new ProjectDao(this);
-		mProjects = mProjectDao.query();
+		// mProjectDao = new ProjectDao(this);
+		// mProjects = mProjectDao.query();
+		initSpinnerProject();
+		Iterator iter = mExcelItemDatas.entrySet().iterator();
+		HashMap<Integer, ExcelItem> mTempExcelItemDatas = new HashMap<Integer, ExcelItem>();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+			Integer key = (Integer) entry.getKey();
+			ExcelItem excelItem = (ExcelItem) entry.getValue();
+			for (Project project : mProjects) {
+				if (excelItem.getProject() != null
+						&& project.getId() == excelItem.getProject().getId()) {
+					mTempExcelItemDatas.put(key, excelItem);
+					break;
+				}
+
+			}
+		}
+		
+		mExcelItemDatas =mTempExcelItemDatas;
+		
 		mLinearlayoutForm.removeAllViews();
 		mExcelItemLinearLayouts.clear();
-		for (Project project : mProjects) {
+
+		Iterator iterator = mExcelItemDatas
+				.entrySet().iterator();
+		Log.e("iterator.hasNext()", "iterator.hasNext():"+iterator.hasNext());
+		while (iterator.hasNext()) {
+			Map.Entry entry = (Map.Entry) iterator.next();
+			Integer key = (Integer) entry.getKey();
+			ExcelItem excelItem = (ExcelItem) entry.getValue();
+
 			ExcelItemLinearLayout excelItemLinearLayout = new ExcelItemLinearLayout(
-					this,MainActivity.this);
-			excelItemLinearLayout.getTvItemDescription().setText(
-					project.getContent());
-			excelItemLinearLayout.setId(project.getId());
-			excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
-			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+project.getId()+".png");
-			
-			if (mExcelItemDatas.containsKey(project.getId())) {
-				ExcelItem excelItem = mExcelItemDatas.get(project.getId());
-				excelItemLinearLayout.getAsViewCheck().setNum(
-						excelItem.getCheckNum());
-				excelItemLinearLayout.getAsViewUnqualified().setNum(
-						excelItem.getUnqualifiedNum());
-				excelItemLinearLayout.getAsViewExamine().setNum(
-						excelItem.getExamineNum());
-				excelItemLinearLayout.getAsViewNg()
-						.setNum(excelItem.getNgNum());
-				excelItemLinearLayout.getEtProcessMode().setText(
-						excelItem.getProcessMode());
-				int sizeIndexOf = mSizes.indexOf(excelItem
-						.getSize());
-				if (sizeIndexOf > -1) {
-					excelItemLinearLayout.getSpSize().setSelection(sizeIndexOf);
-				}
+					this, MainActivity.this);
+			excelItemLinearLayout.setId(key);
+
+			Log.e("进入", "进入");
+			excelItemLinearLayout.getSpProject().setAdapter(mProjectAdapter);
+			int projectIndexOf = mProjects.indexOf(excelItem.getProject());
+			if (projectIndexOf > -1) {
+				excelItemLinearLayout.getSpProject().setSelection(
+						projectIndexOf);
 			}
+			excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
+			int sizeIndexOf = mSizes.indexOf(excelItem.getSize());
+			if (sizeIndexOf > -1) {
+				excelItemLinearLayout.getSpSize().setSelection(sizeIndexOf);
+			}
+
+			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString()
+					.trim()
+					+ key + ".png");
+			excelItemLinearLayout.getAsViewCheck().setNum(
+					excelItem.getCheckNum());
+			excelItemLinearLayout.getAsViewUnqualified().setNum(
+					excelItem.getUnqualifiedNum());
+			excelItemLinearLayout.getAsViewExamine().setNum(
+					excelItem.getExamineNum());
+			excelItemLinearLayout.getAsViewNg().setNum(excelItem.getNgNum());
+			excelItemLinearLayout.getEtProcessMode().setText(
+					excelItem.getProcessMode());
+
 			mExcelItemLinearLayouts.add(excelItemLinearLayout);
 			mLinearlayoutForm.addView(excelItemLinearLayout,
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		}
+
+		// for (Project project : mProjects) {
+		// ExcelItemLinearLayout excelItemLinearLayout = new
+		// ExcelItemLinearLayout(
+		// this, MainActivity.this);
+		// excelItemLinearLayout.getTvItemDescription().setText(
+		// project.getContent());
+		// excelItemLinearLayout.setId(project.getId());
+		// excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
+		// excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString()
+		// .trim()
+		// + project.getId() + ".png");
+		//
+		// if (mExcelItemDatas.containsKey(project.getId())) {
+		// ExcelItem excelItem = mExcelItemDatas.get(project.getId());
+		// excelItemLinearLayout.getAsViewCheck().setNum(
+		// excelItem.getCheckNum());
+		// excelItemLinearLayout.getAsViewUnqualified().setNum(
+		// excelItem.getUnqualifiedNum());
+		// excelItemLinearLayout.getAsViewExamine().setNum(
+		// excelItem.getExamineNum());
+		// excelItemLinearLayout.getAsViewNg()
+		// .setNum(excelItem.getNgNum());
+		// excelItemLinearLayout.getEtProcessMode().setText(
+		// excelItem.getProcessMode());
+		// int sizeIndexOf = mSizes.indexOf(excelItem.getSize());
+		// if (sizeIndexOf > -1) {
+		// excelItemLinearLayout.getSpSize().setSelection(sizeIndexOf);
+		// }
+		// }
+		// mExcelItemLinearLayouts.add(excelItemLinearLayout);
+		// mLinearlayoutForm.addView(excelItemLinearLayout,
+		// LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		// }
 	}
 
 	@Override
@@ -351,37 +461,63 @@ public class MainActivity extends Activity implements OnClickListener {
 			// 测试保存使用数据
 			saveExcel();
 			break;
+		case R.id.tv_add:
+			addProject();
+			break;
 		default:
 			break;
 		}
 	}
+
+	/**
+	 * 添加新的项目编辑模块
+	 */
+	private void addProject() {
+		projectNum += 1;
+		ExcelItemLinearLayout excelItemLinearLayout = new ExcelItemLinearLayout(
+				this, MainActivity.this);
+		
+		excelItemLinearLayout.setId(projectNum);
+		excelItemLinearLayout.getSpProject().setAdapter(mProjectAdapter);
+		excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
+		excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString()
+				.trim()+ projectNum + ".png");
+		mExcelItemLinearLayouts.add(excelItemLinearLayout);
+		mLinearlayoutForm.addView(excelItemLinearLayout,
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+	}
+
 	private void saveExcel() {
-		if(mProjects.size()==0){
+		if (mProjects.size() == 0) {
 			MyToast.showShort(this, "暂无需保存数据!");
 			return;
 		}
-		ExcelDao excelDao=new ExcelDao(this);
-		ExcelItemDao excelItemDao=new ExcelItemDao(this);
-		
-		SharedPreferences flowId=getSharedPreferences("flowId", Activity.MODE_PRIVATE);
-		int mFlowId=flowId.getInt("flowId", 0);
+		ExcelDao excelDao = new ExcelDao(this);
+		ExcelItemDao excelItemDao = new ExcelItemDao(this);
+
+		SharedPreferences flowId = getSharedPreferences("flowId",
+				Activity.MODE_PRIVATE);
+		int mFlowId = flowId.getInt("flowId", 0);
 		ExcelSave excelSave = new ExcelSave();
 		excelSave.setFlowId(mFlowId);
 		excelSave.setTime(creatTime);
-		excelSave.setMyGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition()).getName());
+		excelSave.setMyGroup(mGroups.get(
+				mSpinnerGroup.getSelectedItemPosition()).getName());
 		excelSave.setFanHao(etFanhao.getText().toString().trim());
 		excelDao.save(excelSave);
-		
+
 		Excel excel = new Excel();
 		excel.setFlowId(mFlowId);
 		excel.setTime(creatTime);
-		excel.setGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition()).getName());
+		excel.setGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition())
+				.getName());
 		excel.setFanHao(etFanhao.getText().toString().trim());
-		
+
 		ArrayList<ExcelItem> excelItemsList = new ArrayList<ExcelItem>();
-		
+
 		for (int i = 0; i < mExcelItemLinearLayouts.size(); i++) {
-			ExcelItemLinearLayout excelItemLinearLayout = mExcelItemLinearLayouts.get(i);
+			ExcelItemLinearLayout excelItemLinearLayout = mExcelItemLinearLayouts
+					.get(i);
 			ExcelItem excelItem = new ExcelItem();
 			excelItem.setFlowId(mFlowId);
 			excelItem.setProject(mProjects.get(i));
@@ -396,27 +532,28 @@ public class MainActivity extends Activity implements OnClickListener {
 			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
 					.getText().toString().trim());
 			excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
-			excelItem.setSizeName(mSizes.get(excelItemLinearLayout.getSize()).getName());
+			excelItem.setSizeName(mSizes.get(excelItemLinearLayout.getSize())
+					.getName());
 			excelItem.setPicturePath(excelItemLinearLayout.getPhotoFileName());
 			excelItem.setPicture(excelItemLinearLayout.getPath());
 			excelItem.setTime(creatTime);
-			excelItem.setMyGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition()).getName());
+			excelItem.setMyGroup(mGroups.get(
+					mSpinnerGroup.getSelectedItemPosition()).getName());
 			excelItem.setFanHao(etFanhao.getText().toString().trim());
 			excelItemsList.add(excelItem);
 			excelItemDao.save(excelItem);
 		}
 		excel.setExcelItemsList(excelItemsList);
-		ExportExcel.export(this, excel,excelName);
+		ExportExcel.export(this, excel, excelName);
 		Editor edit = flowId.edit();
-		mFlowId=mFlowId+1;
+		mFlowId = mFlowId + 1;
 		edit.putInt("flowId", mFlowId);
 		edit.commit();
 	}
 
 	public String formatTime() {
 		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-				"yyyyMMddHHmm");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
 		return simpleDateFormat.format(date);
 	}
 }

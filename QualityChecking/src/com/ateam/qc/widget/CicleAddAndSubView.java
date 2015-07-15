@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ public class CicleAddAndSubView extends LinearLayout {
 
     private ImageView subButton;//减按钮
 
-    private TextView editText;//数量显示
+    private EditText editText;//数量显示
 
     int num;          //数量值
     /** 减 */
@@ -75,7 +76,7 @@ public class CicleAddAndSubView extends LinearLayout {
         View view= LayoutInflater.from(context).inflate(R.layout.add_sub_view, null);
         addButton =(ImageView)view.findViewById(R.id.add_btn_id);
         subButton =(ImageView)view.findViewById(R.id.sub_btn_id);
-        editText =(TextView)view.findViewById(R.id.num_text_id);
+        editText =(EditText)view.findViewById(R.id.num_text_id);
         setNum(0);
         addView(view);
     }

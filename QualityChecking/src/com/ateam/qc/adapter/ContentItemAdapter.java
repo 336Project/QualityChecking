@@ -52,7 +52,7 @@ public class ContentItemAdapter extends BaseAdapter{
 		if(convertView==null){
 			LayoutInflater layoutInflater = LayoutInflater.from(mContext);
 			inflate = layoutInflater.inflate(R.layout.content_body_item, null);
-			TextView tvItemDescription = (TextView) inflate.findViewById(R.id.tv_item_description);
+//			TextView tvItemDescription = (TextView) inflate.findViewById(R.id.tv_item_description);
 			CicleAddAndSubView asViewCheck = (CicleAddAndSubView) inflate.findViewById(R.id.asView_check);
 			CicleAddAndSubView asViewUnqualified = (CicleAddAndSubView) inflate.findViewById(R.id.asView_unqualified);
 			CicleAddAndSubView asViewExamine = (CicleAddAndSubView) inflate.findViewById(R.id.asView_examine);
@@ -60,7 +60,7 @@ public class ContentItemAdapter extends BaseAdapter{
 			EditText etProcessMode = (EditText) inflate.findViewById(R.id.et_process_mode);
 			
 			viewholder=new Viewholder();
-			viewholder.setTvItemDescriptionTextView(tvItemDescription);
+//			viewholder.setTvItemDescriptionTextView(tvItemDescription);
 			viewholder.setAsViewCheck(asViewCheck);
 			viewholder.setAsViewUnqualified(asViewUnqualified);
 			viewholder.setAsViewExamine(asViewExamine);

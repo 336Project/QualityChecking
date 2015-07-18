@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ public class CicleAddAndSubView extends LinearLayout {
 
     private ImageView subButton;//减按钮
 
-    private TextView editText;//数量显示
+    private EditText editText;//数量显示
 
     int num;          //数量值
     /** 减 */
@@ -75,8 +76,8 @@ public class CicleAddAndSubView extends LinearLayout {
         View view= LayoutInflater.from(context).inflate(R.layout.add_sub_view, null);
         addButton =(ImageView)view.findViewById(R.id.add_btn_id);
         subButton =(ImageView)view.findViewById(R.id.sub_btn_id);
-        editText =(TextView)view.findViewById(R.id.num_text_id);
-        setNum(0);
+        editText =(EditText)view.findViewById(R.id.num_text_id);
+//        setNum(0);
         addView(view);
     }
 
@@ -96,13 +97,13 @@ public class CicleAddAndSubView extends LinearLayout {
         if(num>0){
             setAddBtnBackgroudResource(R.drawable.button_add);
             setSubBtnBackgroudResource(R.drawable.button_sub);
-            subButton.setVisibility(View.VISIBLE);
+            subButton.setVisibility(View.INVISIBLE);
             editText.setVisibility(View.VISIBLE);
         }else{
             setAddBtnBackgroudResource(R.drawable.button_add);
             setSubBtnBackgroudResource(R.drawable.button_sub);
             subButton.setVisibility(View.INVISIBLE);
-            editText.setVisibility(View.INVISIBLE);
+            editText.setVisibility(View.VISIBLE);
 
         }
         editText.setText(String.valueOf(num));
@@ -181,17 +182,17 @@ public class CicleAddAndSubView extends LinearLayout {
             String numString = editText.getText().toString();
             if (TextUtils.isEmpty(numString)){
                 num = 0;
-                editText.setText("0");
+                editText.setText("");
             } else{
                 if (v.getId()==R.id.add_btn_id){
                     if (++num < 0){
                         num--;
                         subButton.setVisibility(View.INVISIBLE);
-                        editText.setVisibility(View.INVISIBLE);
+                        editText.setVisibility(View.VISIBLE);
                         setAddBtnBackgroudResource(R.drawable.button_add);
                     } else{
                         setAddBtnBackgroudResource(R.drawable.button_add);
-                        subButton.setVisibility(View.VISIBLE);
+                        subButton.setVisibility(View.INVISIBLE);
                         editText.setVisibility(View.VISIBLE);
                         if(isAutoChangeNum){
                             setNum(num);
@@ -205,14 +206,14 @@ public class CicleAddAndSubView extends LinearLayout {
                 } else if (v.getId()==R.id.sub_btn_id){
                     if ( --num < 1) {
                         subButton.setVisibility(View.INVISIBLE);
-                        editText.setVisibility(View.INVISIBLE);
+                        editText.setVisibility(View.VISIBLE);
                         setAddBtnBackgroudResource(R.drawable.button_add);
                         if (onNumChangeListener != null){
                             onNumChangeListener.onNumChange(CicleAddAndSubView.this, TYPE_SUBTRACT, getNum());
                         }
                     } else{
                         setAddBtnBackgroudResource(R.drawable.button_add);
-                        subButton.setVisibility(View.VISIBLE);
+                        subButton.setVisibility(View.INVISIBLE);
                         editText.setVisibility(View.VISIBLE);
                         if(isAutoChangeNum){
                             editText.setText(String.valueOf(num));

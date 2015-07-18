@@ -34,4 +34,12 @@ public class Project {
 	public void setShortName(String shortName) {
 		this.shortName = shortName;
 	}
+	@Override
+	public boolean equals(Object o) {
+		Project otherSize=(Project)o;
+		if(this.id==otherSize.getId()){
+			return true;
+		}
+		return false;
+	}
 }

@@ -70,6 +70,16 @@
             android:background="@drawable/tv_delete_selector"
             android:layout_marginLeft="2dp"
             />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="updateProject"
+            android:text="修改" 
+            android:textColor="@color/white"
+            android:background="@drawable/tv_delete_selector"
+            android:layout_marginLeft="2dp"
+            />
     </LinearLayout>
 
 </LinearLayout>

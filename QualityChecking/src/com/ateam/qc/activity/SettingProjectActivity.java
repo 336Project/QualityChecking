@@ -18,10 +18,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.ateam.qc.R;
-import com.ateam.qc.R.drawable;
-import com.ateam.qc.R.id;
-import com.ateam.qc.R.layout;
-import com.ateam.qc.R.string;
 import com.ateam.qc.application.MyApplication;
 import com.ateam.qc.dao.ProjectDao;
 import com.ateam.qc.model.Project;
@@ -123,34 +119,13 @@ public class SettingProjectActivity extends HBaseActivity {
 				}else{
 					save(no, shortName, content);
 					dismiss(dialog, true);
+					showMsg(SettingProjectActivity.this, "添加成功");
 				}
 				
 			}
 		});
 		builder.create().show();
 		
-	}
-	
-	private void dismiss(DialogInterface dialog,boolean isDismiss){
-		try{
-			Field field=dialog.getClass().getSuperclass().getDeclaredField("mShowing");
-			field.setAccessible(true);
-			field.set(dialog, isDismiss);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	/**
-	 * 保存
-	 */
-	private void save(String no,String shortName,String content){
-		Project pro=new Project();
-		pro.setContent(content);
-		pro.setNo(no);
-		pro.setShortName(shortName);
-		mProjectDao.save(pro);
-		notifyDataSetChanged();
-		mApplication.setRefreshProject(true);
 	}
 	/**
 	 * 删除项目
@@ -162,6 +137,106 @@ public class SettingProjectActivity extends HBaseActivity {
 				mProjectDao.delete(mDatas.get(i).getId());
 			}
 		}
+		notifyDataSetChanged();
+		mApplication.setRefreshProject(true);
+		showMsg(SettingProjectActivity.this, "删除成功");
+	}
+	/**
+	 * 修改 
+	 **/
+	public void updateProject(View view){
+		boolean[] isChecked=mAdapter.getHasChecked();
+		int count = 0;
+		Project pro = null;
+		for (int i = 0; i < isChecked.length; i++) {
+			if(isChecked[i]){
+				count++;
+				if(count > 1){
+					showMsg(this, "一次只能修改一项");
+					return;
+				}
+				pro = mDatas.get(i);
+			}
+		}
+		if(isChecked.length == 0 || pro == null){
+			showMsg(this, "请选中项再操作");
+			return;
+		}
+		final Project currPro = pro;
+		
+		AlertDialog.Builder builder=new Builder(this);
+		builder.setCancelable(false);
+		builder.setTitle("修改项目");
+		View v=LayoutInflater.from(this).inflate(R.layout.item_dialog_add_project, null);
+		
+		final Spinner noSpinner=(Spinner) v.findViewById(R.id.sp_no);
+		ArrayList<String> proNos = mProNoList;
+		proNos.add(0, currPro.getNo());
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, proNos);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		noSpinner.setAdapter(adapter);
+		noSpinner.setSelection(0);
+		
+		final HAutoCompleteTextView editShorName = (HAutoCompleteTextView) v.findViewById(R.id.et_short_name);
+		editShorName.setText(currPro.getShortName());
+		final HAutoCompleteTextView editContent = (HAutoCompleteTextView) v.findViewById(R.id.et_content);
+		editContent.setText(currPro.getContent());
+		builder.setView(v);
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dismiss(dialog, true);
+			}
+		});
+		builder.setPositiveButton("修改", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String no=noSpinner.getSelectedItem().toString();
+				String shortName=editShorName.getText().toString();
+				String content=editContent.getText().toString();
+				if(TextUtils.isEmpty(shortName)){
+					showMsg(SettingProjectActivity.this, "简称不能为空");
+					dismiss(dialog, false);
+				}else if(TextUtils.isEmpty(content)){
+					showMsg(SettingProjectActivity.this, "内容不能为空");
+					dismiss(dialog, false);
+				}else{
+					currPro.setNo(no);
+					currPro.setShortName(shortName);
+					currPro.setContent(content);
+					mProjectDao.update(currPro);
+					dismiss(dialog, true);
+					showMsg(SettingProjectActivity.this, "修改成功");
+					notifyDataSetChanged();
+					mApplication.setRefreshProject(true);
+				}
+				
+			}
+		});
+		builder.create().show();
+	}
+	
+	private void dismiss(DialogInterface dialog,boolean isDismiss){
+		try{
+			Field field=dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+			field.setAccessible(true);
+			field.set(dialog, isDismiss);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 保存
+	 */
+	private void save(String no,String shortName,String content){
+		Project pro=new Project();
+		pro.setContent(content);
+		pro.setNo(no);
+		pro.setShortName(shortName);
+		mProjectDao.save(pro);
 		notifyDataSetChanged();
 		mApplication.setRefreshProject(true);
 	}

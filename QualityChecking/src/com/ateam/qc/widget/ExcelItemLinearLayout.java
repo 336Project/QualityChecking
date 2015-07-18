@@ -28,14 +28,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class ExcelItemLinearLayout extends LinearLayout {
-	private TextView tvItemDescription;
 	private CicleAddAndSubView asViewCheck;
 	private CicleAddAndSubView asViewUnqualified;
 	private CicleAddAndSubView asViewExamine;
 	private CicleAddAndSubView asViewNg;
 	private EditText etProcessMode;
+	/**
+	 * Spinner
+	 */
 	private Spinner spSize;
+	private Spinner spProject;
+	/**
+	 * Spinner适配器的position
+	 */
 	private int size;
+	private int projectSize;
+
 	public static final int REQUEST_CODE_CAMERA = 1002;
 	private Activity activity;
 	private TextView tvTakePhoto;
@@ -60,7 +68,13 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	public void setSize(int size) {
 		this.size = size;
 	}
+	public int getProjectSize() {
+		return projectSize;
+	}
 
+	public void setProjectSize(int projectSize) {
+		this.projectSize = projectSize;
+	}
 	public Spinner getSpSize() {
 		return spSize;
 	}
@@ -68,7 +82,13 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	public void setSpSize(Spinner spSize) {
 		this.spSize = spSize;
 	}
+	public Spinner getSpProject() {
+		return spProject;
+	}
 
+	public void setSpProject(Spinner spProject) {
+		this.spProject = spProject;
+	}
 	public EditText getEtProcessMode() {
 		return etProcessMode;
 	}
@@ -108,15 +128,6 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	public void setAsViewCheck(CicleAddAndSubView asViewCheck) {
 		this.asViewCheck = asViewCheck;
 	}
-
-	public TextView getTvItemDescription() {
-		return tvItemDescription;
-	}
-
-	public void setTvItemDescription(TextView tvItemDescription) {
-		this.tvItemDescription = tvItemDescription;
-	}
-
 	public ExcelItemLinearLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
@@ -141,15 +152,24 @@ public class ExcelItemLinearLayout extends LinearLayout {
 		setLayoutParams(params);
 		LayoutInflater layoutInflater = LayoutInflater.from(getContext());
 		View view = layoutInflater.inflate(R.layout.content_body_item, null);
-		tvItemDescription = (TextView) view
-				.findViewById(R.id.tv_item_description);
 		asViewCheck = (CicleAddAndSubView) view.findViewById(R.id.asView_check);
-		asViewUnqualified = (CicleAddAndSubView) view
-				.findViewById(R.id.asView_unqualified);
-		asViewExamine = (CicleAddAndSubView) view
-				.findViewById(R.id.asView_examine);
+		asViewUnqualified = (CicleAddAndSubView) view.findViewById(R.id.asView_unqualified);
+		asViewExamine = (CicleAddAndSubView) view.findViewById(R.id.asView_examine);
 		asViewNg = (CicleAddAndSubView) view.findViewById(R.id.asView_ng);
 		etProcessMode = (EditText) view.findViewById(R.id.et_process_mode);
+		
+		spProject = (Spinner) view.findViewById(R.id.sp_project);
+		spProject.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				setProjectSize(position);
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
+		});
 		spSize = (Spinner) view.findViewById(R.id.sp_size);
 		spSize.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -157,10 +177,8 @@ public class ExcelItemLinearLayout extends LinearLayout {
 					int arg2, long arg3) {
 				setSize(arg2);
 			}
-
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-
 			}
 		});
 		tvTakePhoto = (TextView) view.findViewById(R.id.tv_take_photo);

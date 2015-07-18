@@ -86,6 +86,7 @@ public class SettingSizeActivity extends HBaseActivity {
 		mDatas.addAll(mSizeDao.query());
 		mAdapter.notifyDataSetChanged();
 		mApplication.setRefreshSize(true);
+		showMsg(SettingSizeActivity.this, "添加成功");
 	}
 	/**
 	 * 删除组别
@@ -102,6 +103,7 @@ public class SettingSizeActivity extends HBaseActivity {
 		mAdapter.setHasChecked(new boolean[mDatas.size()]);
 		mAdapter.notifyDataSetChanged();
 		mApplication.setRefreshSize(true);
+		showMsg(SettingSizeActivity.this, "删除成功");
 	}
 	
 	private class SizeAdapter extends HBaseAdapter<Size>{

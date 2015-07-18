@@ -17,6 +17,10 @@ public class ProjectDao extends HBaseDao {
 		mDb.save(pro);
 	}
 	
+	public void update(Project pro){
+		mDb.update(pro);
+	}
+	
 	public List<Project> query(){
 		return mDb.findAll(Project.class, "no ASC");
 	}

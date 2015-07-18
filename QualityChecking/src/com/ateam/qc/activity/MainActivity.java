@@ -149,7 +149,7 @@ public class MainActivity extends Activity implements OnClickListener {
 //				}
 //			});
 			
-			mExcelItemLinearLayouts.add(excelItemLinearLayout);
+			mExcelItemLinearLayouts.add(excelItemLinearLayout);	
 			mLinearlayoutForm.addView(excelItemLinearLayout,
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		}
@@ -416,7 +416,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	public String formatTime() {
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-				"yyyyMMddHHmm");
+				"yyyyMMdd");
 		return simpleDateFormat.format(date);
 	}
 }

@@ -10,9 +10,11 @@ import com.ateam.qc.model.Excel;
 import com.ateam.qc.model.ExcelItem;
 import com.team.hbase.utils.FileUtil;
 
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.format.CellFormat;
+import jxl.read.biff.BiffException;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableImage;
@@ -28,6 +30,10 @@ import android.widget.Toast;
 
 public class ExportExcel {
 	private static Context mContext;
+	private ArrayList<ExcelItem> oldExcelItemsList=new ArrayList<ExcelItem>();//已存在的表里面的信息
+	private static boolean hasExcel=false;
+	private static Workbook book;//已经存在的excel对象
+	private static int Rows=0;
 
 	// 导出数据
 	public static void export(Context context, Excel excel, String excelName) {
@@ -45,8 +51,19 @@ public class ExportExcel {
 			// FileUtil.getInstance().createFileInSDCard(Constant.SAVED_EXCEL_DIR_PATH,
 			// excelName+".xls")
 			// 首先要使用Workbook类的工厂方法创建一个可写入的工作薄(Workbook)对象
-			wwb = Workbook.createWorkbook(new File(Environment
-					.getExternalStorageDirectory() + "/" +  Constant.SAVED_EXCEL_DIR_PATH+"/"+excelName + ".xls"));
+			File file=new File(Environment
+					.getExternalStorageDirectory() + "/" +  Constant.SAVED_EXCEL_DIR_PATH+"/"+excelName + ".xls");
+			//判断是否已经生成了excel表格
+	    	if(file.exists()){
+	    		hasExcel=true;
+	    		try {
+					book = Workbook.getWorkbook(file);
+				} catch (BiffException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    		}
+			wwb = Workbook.createWorkbook(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -115,8 +132,52 @@ public class ExportExcel {
 					e.printStackTrace();
 				}
 			}
+			
+			/**
+			 * 如果已经存在excel表数据  获取并添加的新表中  begin
+			 */
+			if(hasExcel){
+				ArrayList<String> history;
+				// 获得第一个工作表对象            
+				Sheet sheet = book.getSheet(0); 
+				Rows = sheet.getRows(); 
+				for (int i = 2; i < Rows; ++i) { 
+//						for (int j = 0; j < Cols; ++j) { 
+//							
+//						} 
+					history = new ArrayList<String>();
+					history.add((sheet.getCell(0, i)).getContents());
+					history.add((sheet.getCell(1, i)).getContents());
+					history.add((sheet.getCell(2, i)).getContents());
+					history.add((sheet.getCell(3, i)).getContents());
+					history.add((sheet.getCell(4, i)).getContents());
+					history.add((sheet.getCell(5, i)).getContents());
+					history.add((sheet.getCell(6, i)).getContents());
+					history.add((sheet.getCell(7, i)).getContents());
+					System.out.println(history.size());
+					int k = 0;
+					for (String l : history) {
+						Label labelC = new Label(k, i, l);
+						k++;
+						try {
+							// 将生成的单元格添加到工作表中
+							ws.addCell(labelC);
+						} catch (RowsExceededException e) {
+							e.printStackTrace();
+						} catch (WriteException e) {
+							e.printStackTrace();
+						}
+					}
+					history = null;
+				} 
+				book.close(); 
+			}
+			/**
+			 * 如果已经存在excel表数据  获取并添加的新表中  end
+			 */
 			ArrayList<String> li;
 
+			//外面传入的值存入excel中
 			for (int j = 0; j < excelItemsList.size(); j++) {
 
 				ExcelItem excelItem = excelItemsList.get(j);
@@ -139,8 +200,13 @@ public class ExportExcel {
 
 				System.out.println(li.size());
 				int k = 0;
+				int fistRow=0;
+				//要是有历史数据  行从 j+rows 即当前数据列加上已有行数， 没有历史数据  就从j+fistrow 去掉头部的第三行开始
+				if(!hasExcel){
+					fistRow=2;
+				}
 				for (String l : li) {
-					Label labelC = new Label(k, j + 2, l);
+					Label labelC = new Label(k, j+fistRow+Rows, l);
 					k++;
 					try {
 						// 将生成的单元格添加到工作表中
@@ -174,4 +240,5 @@ public class ExportExcel {
 			Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT).show();
 		}
 	}
+	
 }

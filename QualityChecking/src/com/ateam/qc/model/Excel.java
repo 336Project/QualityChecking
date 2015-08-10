@@ -6,8 +6,6 @@ import net.tsz.afinal.annotation.sqlite.Id;
 import net.tsz.afinal.annotation.sqlite.Table;
 import net.tsz.afinal.annotation.sqlite.Transient;
 
-import android.app.ListActivity;
-
 @Table(name=Excel.TABLE_EXCEL)
 public class Excel {
 	@Transient

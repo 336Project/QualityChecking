@@ -19,7 +19,9 @@ import android.widget.Spinner;
 
 import com.ateam.qc.R;
 import com.ateam.qc.application.MyApplication;
+import com.ateam.qc.dao.GroupDao;
 import com.ateam.qc.dao.ProjectDao;
+import com.ateam.qc.model.Group;
 import com.ateam.qc.model.Project;
 import com.team.hbase.activity.HBaseActivity;
 import com.team.hbase.adapter.HBaseAdapter;
@@ -86,10 +88,26 @@ public class SettingProjectActivity extends HBaseActivity {
 		builder.setCancelable(false);
 		builder.setTitle("添加项目");
 		View v=LayoutInflater.from(this).inflate(R.layout.item_dialog_add_project, null);
+		//序号
 		final Spinner noSpinner=(Spinner) v.findViewById(R.id.sp_no);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mProNoList);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		noSpinner.setAdapter(adapter);
+		ArrayAdapter<String> noAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mProNoList);
+		noAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		noSpinner.setAdapter(noAdapter);
+		
+		//组别
+		final Spinner groupSpinner=(Spinner) v.findViewById(R.id.sp_group);
+		ArrayList<String> groupList = new ArrayList<String>();
+		GroupDao groupDao = new GroupDao(this);
+		List<Group> groups = groupDao.query();
+		if(groups!=null){
+			for (Group group : groups) {
+				groupList.add(group.getName());
+			}
+		}
+		ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, groupList);
+		groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		groupSpinner.setAdapter(groupAdapter);
+		
 		final HAutoCompleteTextView editShorName = (HAutoCompleteTextView) v.findViewById(R.id.et_short_name);
 		final HAutoCompleteTextView editContent = (HAutoCompleteTextView) v.findViewById(R.id.et_content);
 		builder.setView(v);
@@ -107,6 +125,7 @@ public class SettingProjectActivity extends HBaseActivity {
 				String no=noSpinner.getSelectedItem().toString();
 				String shortName=editShorName.getText().toString();
 				String content=editContent.getText().toString();
+				String groupName = groupSpinner.getSelectedItem().toString();
 				if(mProjectDao.isExist(no)){
 					showMsg(SettingProjectActivity.this, "该序号已存在，请重新选择");
 					dismiss(dialog, false);
@@ -117,7 +136,7 @@ public class SettingProjectActivity extends HBaseActivity {
 					showMsg(SettingProjectActivity.this, "内容不能为空");
 					dismiss(dialog, false);
 				}else{
-					save(no, shortName, content);
+					save(no, shortName, content,groupName);
 					dismiss(dialog, true);
 					showMsg(SettingProjectActivity.this, "添加成功");
 				}
@@ -231,11 +250,12 @@ public class SettingProjectActivity extends HBaseActivity {
 	/**
 	 * 保存
 	 */
-	private void save(String no,String shortName,String content){
+	private void save(String no,String shortName,String content,String groupName){
 		Project pro=new Project();
 		pro.setContent(content);
 		pro.setNo(no);
 		pro.setShortName(shortName);
+		pro.setGroupName(groupName);
 		mProjectDao.save(pro);
 		notifyDataSetChanged();
 		mApplication.setRefreshProject(true);
@@ -273,6 +293,7 @@ public class SettingProjectActivity extends HBaseActivity {
 	        }
 			holder.getTextView(R.id.tv_project_content).setText(bean.getContent());
 			holder.getTextView(R.id.tv_project_short_name).setText(bean.getShortName());
+			holder.getTextView(R.id.tv_project_group).setText(bean.getGroupName());
 			final CheckBox cb=holder.getCheckBox(R.id.cb_project);
 			cb.setText(bean.getNo());
 			holder.getConvertView().setOnClickListener(new View.OnClickListener() {

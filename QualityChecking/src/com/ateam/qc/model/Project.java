@@ -9,6 +9,7 @@ public class Project {
 	private String no;
 	private String content;
 	private String shortName;
+	private String groupName;
 	
 	public int getId() {
 		return id;
@@ -41,5 +42,11 @@ public class Project {
 			return true;
 		}
 		return false;
+	}
+	public String getGroupName() {
+		return groupName;
+	}
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 }

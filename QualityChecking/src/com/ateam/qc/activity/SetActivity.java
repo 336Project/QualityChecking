@@ -66,6 +66,13 @@ public class SetActivity extends Activity implements OnClickListener{
 		jump(SettingProjectActivity.class);
 	}
 	
+	/**
+	 * 不良状况项目
+	 */
+	public void goSettingBadness(View view){
+		jump(SettingBadnessActivity.class);
+	}
+	
 	private void jump(Class<?> cls){
 		startActivity(new Intent(this, cls));
 	}

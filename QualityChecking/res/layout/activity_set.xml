@@ -89,7 +89,35 @@
                 android:textColor="#A8A8A8"
                 android:textSize="17sp" />
         </LinearLayout>
+		
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:background="#EEEEEE" />
 
+        <LinearLayout
+            android:id="@+id/layout_setting_badness"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="center_vertical"
+            android:onClick="goSettingBadness"
+             android:background="@drawable/menu_background_selector"
+             >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/set_item_3"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"
+                android:text="不良状况设置"
+                android:textColor="#A8A8A8"
+                android:textSize="17sp" />
+        </LinearLayout>
+        
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

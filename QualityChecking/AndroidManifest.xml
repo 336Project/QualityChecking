@@ -55,6 +55,11 @@
             android:theme="@style/NoActionBarTheme" >
         </activity>
         <activity
+            android:name="com.ateam.qc.activity.SettingBadnessActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoActionBarTheme" >
+        </activity>
+        <activity
 			android:name="com.ateam.qc.activity.SettingSizeActivity"
 			android:screenOrientation="landscape"
             android:theme="@style/NoActionBarTheme" >        </activity>

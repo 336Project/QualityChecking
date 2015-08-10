@@ -19,8 +19,10 @@ import android.widget.Spinner;
 
 import com.ateam.qc.R;
 import com.ateam.qc.application.MyApplication;
+import com.ateam.qc.dao.BadnessDao;
 import com.ateam.qc.dao.GroupDao;
 import com.ateam.qc.dao.ProjectDao;
+import com.ateam.qc.model.Badness;
 import com.ateam.qc.model.Group;
 import com.ateam.qc.model.Project;
 import com.team.hbase.activity.HBaseActivity;
@@ -29,25 +31,24 @@ import com.team.hbase.adapter.ViewHolder;
 import com.team.hbase.widget.HAutoCompleteTextView;
 
 /**
- * 项目设置
+ * 不良状况设置
  * @author Helen
  * 2015-6-18上午9:52:03
  */
-public class SettingProjectActivity extends HBaseActivity {
+public class SettingBadnessActivity extends HBaseActivity {
 	private ListView mListView;
-	private List<Project> mDatas;
-	private ProjectAdapter mAdapter;
-	private ProjectDao mProjectDao;
+	private List<Badness> mDatas;
+	private BadnessAdapter mAdapter;
+	private BadnessDao mBadnessDao;
 	
-	private ArrayList<String> mProNoList=new ArrayList<String>();
 	private MyApplication mApplication;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getRightIcon().setVisibility(View.GONE);
 		getLeftIcon().setImageDrawable(getResources().getDrawable(R.drawable.back));
-		setBaseContentView(R.layout.activity_setting_project);
-		setActionBarTitle("项目设置");
+		setBaseContentView(R.layout.activity_setting_badness);
+		setActionBarTitle("不良状况设置");
 		init();
 		initApplication();
 	}
@@ -58,41 +59,23 @@ public class SettingProjectActivity extends HBaseActivity {
 
 	private void init() {
 		mListView=(ListView) findViewById(R.id.listView);
-		mProjectDao=new ProjectDao(this);
-		mDatas=mProjectDao.query();
+		mBadnessDao=new BadnessDao(this);
+		mDatas=mBadnessDao.query();
 		if(mDatas==null||mDatas.size()==0){
-			mDatas=new ArrayList<Project>();
+			mDatas=new ArrayList<Badness>();
 			showMsg(this, R.string.empty_data);
 		}
-		mAdapter=new ProjectAdapter(this, mDatas);
+		mAdapter=new BadnessAdapter(this, mDatas);
 		mListView.setAdapter(mAdapter);
-		refreshNo();
-	}
-	/**
-	 * 刷新序号
-	 */
-	private void refreshNo(){
-		mProNoList.clear();
-		for (int i = 1; i <= 100; i++) {
-			mProNoList.add(i-1,i+"");
-		}
-		for (Project pro : mDatas) {
-			mProNoList.remove(pro.getNo());
-		}
 	}
 	/**
 	 * 添加项目
 	 */
-	public void addProject(View view){
+	public void addBadness(View view){
 		AlertDialog.Builder builder=new Builder(this);
 		builder.setCancelable(false);
-		builder.setTitle("添加项目");
-		View v=LayoutInflater.from(this).inflate(R.layout.item_dialog_add_project, null);
-		//序号
-		final Spinner noSpinner=(Spinner) v.findViewById(R.id.sp_no);
-		ArrayAdapter<String> noAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mProNoList);
-		noAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		noSpinner.setAdapter(noAdapter);
+		builder.setTitle("添加不良状况");
+		View v=LayoutInflater.from(this).inflate(R.layout.item_dialog_add_badness, null);
 		
 		//组别
 		final Spinner groupSpinner=(Spinner) v.findViewById(R.id.sp_group);
@@ -108,7 +91,6 @@ public class SettingProjectActivity extends HBaseActivity {
 		groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		groupSpinner.setAdapter(groupAdapter);
 		
-		final HAutoCompleteTextView editShorName = (HAutoCompleteTextView) v.findViewById(R.id.et_short_name);
 		final HAutoCompleteTextView editContent = (HAutoCompleteTextView) v.findViewById(R.id.et_content);
 		builder.setView(v);
 		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -122,26 +104,18 @@ public class SettingProjectActivity extends HBaseActivity {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				String no=noSpinner.getSelectedItem().toString();
-				String shortName=editShorName.getText().toString();
 				String content=editContent.getText().toString();
 				String groupName = groupSpinner.getSelectedItem().toString();
-				if(mProjectDao.isExist(no)){
-					showMsg(SettingProjectActivity.this, "该序号已存在，请重新选择");
-					dismiss(dialog, false);
-				}else if(TextUtils.isEmpty(groupName)){
-					showMsg(SettingProjectActivity.this, "组别不能为空");
-					dismiss(dialog, false);
-				}else if(TextUtils.isEmpty(shortName)){
-					showMsg(SettingProjectActivity.this, "简称不能为空");
+				if(TextUtils.isEmpty(groupName)){
+					showMsg(SettingBadnessActivity.this, "组别不能为空");
 					dismiss(dialog, false);
 				}else if(TextUtils.isEmpty(content)){
-					showMsg(SettingProjectActivity.this, "内容不能为空");
+					showMsg(SettingBadnessActivity.this, "内容不能为空");
 					dismiss(dialog, false);
 				}else{
-					save(no, shortName, content,groupName);
+					save(content,groupName);
 					dismiss(dialog, true);
-					showMsg(SettingProjectActivity.this, "添加成功");
+					showMsg(SettingBadnessActivity.this, "添加成功");
 				}
 				
 			}
@@ -152,24 +126,24 @@ public class SettingProjectActivity extends HBaseActivity {
 	/**
 	 * 删除项目
 	 */
-	public void deleteProject(View view){
+	public void deleteBadness(View view){
 		boolean[] isChecked=mAdapter.getHasChecked();
 		for (int i = 0; i < isChecked.length; i++) {
 			if(isChecked[i]){
-				mProjectDao.delete(mDatas.get(i).getId());
+				mBadnessDao.delete(mDatas.get(i).getId());
 			}
 		}
 		notifyDataSetChanged();
 		mApplication.setRefreshProject(true);
-		showMsg(SettingProjectActivity.this, "删除成功");
+		showMsg(SettingBadnessActivity.this, "删除成功");
 	}
 	/**
 	 * 修改 
 	 **/
-	public void updateProject(View view){
+	public void updateBadness(View view){
 		boolean[] isChecked=mAdapter.getHasChecked();
 		int count = 0;
-		Project pro = null;
+		Badness b = null;
 		for (int i = 0; i < isChecked.length; i++) {
 			if(isChecked[i]){
 				count++;
@@ -177,27 +151,19 @@ public class SettingProjectActivity extends HBaseActivity {
 					showMsg(this, "一次只能修改一项");
 					return;
 				}
-				pro = mDatas.get(i);
+				b = mDatas.get(i);
 			}
 		}
-		if(isChecked.length == 0 || pro == null){
+		if(isChecked.length == 0 || b == null){
 			showMsg(this, "请选中项再操作");
 			return;
 		}
-		final Project currPro = pro;
+		final Badness currBad = b;
 		
 		AlertDialog.Builder builder=new Builder(this);
 		builder.setCancelable(false);
 		builder.setTitle("修改项目");
-		View v=LayoutInflater.from(this).inflate(R.layout.item_dialog_add_project, null);
-		
-		final Spinner noSpinner=(Spinner) v.findViewById(R.id.sp_no);
-		ArrayList<String> proNos = mProNoList;
-		proNos.add(0, currPro.getNo());
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, proNos);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		noSpinner.setAdapter(adapter);
-		noSpinner.setSelection(0);
+		View v=LayoutInflater.from(this).inflate(R.layout.item_dialog_add_badness, null);
 		
 		//组别
 		final Spinner groupSpinner=(Spinner) v.findViewById(R.id.sp_group);
@@ -213,10 +179,8 @@ public class SettingProjectActivity extends HBaseActivity {
 		groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		groupSpinner.setAdapter(groupAdapter);
 		
-		final HAutoCompleteTextView editShorName = (HAutoCompleteTextView) v.findViewById(R.id.et_short_name);
-		editShorName.setText(currPro.getShortName());
 		final HAutoCompleteTextView editContent = (HAutoCompleteTextView) v.findViewById(R.id.et_content);
-		editContent.setText(currPro.getContent());
+		editContent.setText(currBad.getName());
 		builder.setView(v);
 		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
 			
@@ -229,27 +193,20 @@ public class SettingProjectActivity extends HBaseActivity {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				String no=noSpinner.getSelectedItem().toString();
 				String groupName=groupSpinner.getSelectedItem().toString();
-				String shortName=editShorName.getText().toString();
 				String content=editContent.getText().toString();
-				if(TextUtils.isEmpty(shortName)){
-					showMsg(SettingProjectActivity.this, "简称不能为空");
-					dismiss(dialog, false);
-				}else if(TextUtils.isEmpty(groupName)){
-					showMsg(SettingProjectActivity.this, "组别不能为空");
+				if(TextUtils.isEmpty(groupName)){
+					showMsg(SettingBadnessActivity.this, "组别不能为空");
 					dismiss(dialog, false);
 				}else if(TextUtils.isEmpty(content)){
-					showMsg(SettingProjectActivity.this, "内容不能为空");
+					showMsg(SettingBadnessActivity.this, "内容不能为空");
 					dismiss(dialog, false);
 				}else{
-					currPro.setNo(no);
-					currPro.setShortName(shortName);
-					currPro.setContent(content);
-					mProjectDao.update(currPro);
-					currPro.setGroupName(groupName);
+					currBad.setGroupName(groupName);
+					currBad.setName(content);
+					mBadnessDao.update(currBad);
 					dismiss(dialog, true);
-					showMsg(SettingProjectActivity.this, "修改成功");
+					showMsg(SettingBadnessActivity.this, "修改成功");
 					notifyDataSetChanged();
 					mApplication.setRefreshProject(true);
 				}
@@ -272,13 +229,11 @@ public class SettingProjectActivity extends HBaseActivity {
 	/**
 	 * 保存
 	 */
-	private void save(String no,String shortName,String content,String groupName){
-		Project pro=new Project();
-		pro.setContent(content);
-		pro.setNo(no);
-		pro.setShortName(shortName);
-		pro.setGroupName(groupName);
-		mProjectDao.save(pro);
+	private void save(String content,String groupName){
+		Badness b=new Badness();
+		b.setName(content);
+		b.setGroupName(groupName);
+		mBadnessDao.save(b);
 		notifyDataSetChanged();
 		mApplication.setRefreshProject(true);
 	}
@@ -287,25 +242,24 @@ public class SettingProjectActivity extends HBaseActivity {
 	 */
 	private void notifyDataSetChanged(){
 		mDatas.clear();
-		mDatas.addAll(mProjectDao.query());
+		mDatas.addAll(mBadnessDao.query());
 		mAdapter.setHasChecked(new boolean[mDatas.size()]);
 		mAdapter.notifyDataSetChanged();
-		refreshNo();
 	}
 	/**
 	 * 适配器
 	 * @author Helen
 	 * 2015-6-18上午10:13:21
 	 */
-	private class ProjectAdapter extends HBaseAdapter<Project>{
+	private class BadnessAdapter extends HBaseAdapter<Badness>{
 		private boolean[] mHasChecked;
-		public ProjectAdapter(Context c, List<Project> datas) {
+		public BadnessAdapter(Context c, List<Badness> datas) {
 			super(c, datas);
 			mHasChecked=new boolean[getCount()];
 		}
 
 		@Override
-		public void convert(ViewHolder holder, Project bean,final int position) {
+		public void convert(ViewHolder holder, Badness bean,final int position) {
 			if(mHasChecked.length!=getCount()){  
 	            boolean[] hasCheckedCache=mHasChecked.clone();  
 	            mHasChecked=new boolean[getCount()];  
@@ -313,11 +267,10 @@ public class SettingProjectActivity extends HBaseActivity {
 	                mHasChecked[i]=hasCheckedCache[i];  
 	            }  
 	        }
-			holder.getTextView(R.id.tv_project_content).setText(bean.getContent());
-			holder.getTextView(R.id.tv_project_short_name).setText(bean.getShortName());
-			holder.getTextView(R.id.tv_project_group).setText(bean.getGroupName());
-			final CheckBox cb=holder.getCheckBox(R.id.cb_project);
-			cb.setText(bean.getNo());
+			holder.getTextView(R.id.tv_badness_content).setText(bean.getName());
+			holder.getTextView(R.id.tv_badness_group).setText(bean.getGroupName());
+			final CheckBox cb=holder.getCheckBox(R.id.cb_badness);
+			cb.setText(bean.getId()+"");
 			holder.getConvertView().setOnClickListener(new View.OnClickListener() {
 				
 				@Override
@@ -332,7 +285,7 @@ public class SettingProjectActivity extends HBaseActivity {
 
 		@Override
 		public int getResId() {
-			return R.layout.adapter_setting_project;
+			return R.layout.adapter_setting_badness;
 		}
 		
 		public boolean[] getHasChecked() {

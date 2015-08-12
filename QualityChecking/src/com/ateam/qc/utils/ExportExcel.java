@@ -90,9 +90,12 @@ public class ExportExcel {
 					try {
 						WritableCellFormat wc = new WritableCellFormat();
 						wc.setAlignment(Alignment.CENTRE);
-						Label labelHead = new Label(1, 5 * weight + 16
-								* (weight), excelItem.getSize().getName() + "　"
-								+ excelItem.getProject().getContent(), wc);
+						Label labelHead = new Label(
+								1, 
+								5 * weight + 16* (weight), 
+								excelItem.getSize().getName() + "　"
+								+ excelItem.getProject().getContent(), 
+								wc);
 						wsPicture.addCell(labelHead);
 					} catch (RowsExceededException e) {
 						e.printStackTrace();
@@ -120,7 +123,7 @@ public class ExportExcel {
 			}
 			// 下面开始添加单元格
 			String[] topic = { "型号", "查核次数", "NG数", "检查数量", "不合格数量", "不良率",
-					"项目", "处理方式", };
+					"简称", "不良状况", };
 			for (int i = 0; i < topic.length; i++) {
 				Label labelC = new Label(i, 1, topic[i]);
 				try {

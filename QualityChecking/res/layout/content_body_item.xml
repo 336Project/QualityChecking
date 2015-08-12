@@ -8,15 +8,12 @@
     android:paddingBottom="8dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
-    android:paddingTop="8dp" 
-    >
+    android:paddingTop="8dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical" 
-        
-        >
+        android:gravity="center_vertical" >
 
         <LinearLayout
             android:layout_width="0dp"
@@ -27,7 +24,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="项目内容:" />
+                android:text="简称:" />
+
             <Spinner
                 android:id="@+id/sp_project"
                 android:layout_width="0dp"
@@ -73,8 +71,8 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:gravity="center_vertical" >
 
             <TextView
@@ -102,8 +100,8 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:gravity="center_vertical" >
 
             <TextView
@@ -117,8 +115,7 @@
             <com.ateam.qc.widget.CicleAddAndSubView
                 android:id="@+id/asView_unqualified"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 
@@ -129,8 +126,8 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:gravity="center_vertical" >
 
             <TextView
@@ -158,8 +155,8 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:gravity="center_vertical" >
 
             <TextView
@@ -173,26 +170,36 @@
             <com.ateam.qc.widget.CicleAddAndSubView
                 android:id="@+id/asView_ng"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/et_process_mode"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/ll_shape"
-        android:ems="10"
-        android:gravity="left|top"
-        android:hint="请输入处理方式"
-        android:minLines="5"
-        android:paddingBottom="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp"
-        android:textSize="16sp" />
+        android:orientation="vertical" >
+		<TextView 
+		    android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="不良情况"
+		    />
+        <EditText
+            android:id="@+id/et_process_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ll_shape"
+            android:ems="10"
+            android:gravity="left|top"
+            android:hint="请输入不良状况"
+            android:minLines="5"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="8dp"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

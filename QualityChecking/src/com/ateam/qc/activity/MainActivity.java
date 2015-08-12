@@ -230,7 +230,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 		mProjectStrings = new String[mProjects.size()];
 		for (int i = 0; i < mProjects.size(); i++) {
-			mProjectStrings[i] = new String(mProjects.get(i).getContent());
+			mProjectStrings[i] = new String(mProjects.get(i).getShortName());
 			Log.e("mProjectStrings[i]", "mProjectStrings[i]:"+mProjectStrings[i]);
 		}
 		mProjectAdapter = new ArrayAdapter<String>(this,
@@ -548,7 +548,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			ExcelItem excelItem = new ExcelItem();
 			excelItem.setFlowId(mFlowId);
 			excelItem.setProject(mProjects.get(i));
-			excelItem.setPorjectName(mProjects.get(i).getContent());
+			excelItem.setPorjectName(mProjects.get(i).getShortName());
 			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
 					.getNum());
 			excelItem.setUnqualifiedNum(excelItemLinearLayout

@@ -116,6 +116,7 @@ public class SettingBadnessActivity extends HBaseActivity {
 					save(content,groupName);
 					dismiss(dialog, true);
 					showMsg(SettingBadnessActivity.this, "添加成功");
+					mApplication.setRefreshBadness(true);
 				}
 				
 			}
@@ -134,7 +135,7 @@ public class SettingBadnessActivity extends HBaseActivity {
 			}
 		}
 		notifyDataSetChanged();
-		mApplication.setRefreshProject(true);
+		mApplication.setRefreshBadness(true);
 		showMsg(SettingBadnessActivity.this, "删除成功");
 	}
 	/**
@@ -208,7 +209,7 @@ public class SettingBadnessActivity extends HBaseActivity {
 					dismiss(dialog, true);
 					showMsg(SettingBadnessActivity.this, "修改成功");
 					notifyDataSetChanged();
-					mApplication.setRefreshProject(true);
+					mApplication.setRefreshBadness(true);
 				}
 				
 			}
@@ -235,7 +236,7 @@ public class SettingBadnessActivity extends HBaseActivity {
 		b.setGroupName(groupName);
 		mBadnessDao.save(b);
 		notifyDataSetChanged();
-		mApplication.setRefreshProject(true);
+		mApplication.setRefreshBadness(true);
 	}
 	/**
 	 * 刷新列表

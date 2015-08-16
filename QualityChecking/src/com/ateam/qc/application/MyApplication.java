@@ -12,7 +12,14 @@ public class MyApplication extends Application{
 	private boolean refreshGroup;
 	private boolean refreshProject;
 	private boolean refreshSize;
+	private boolean refreshBadness;
 	
+	public boolean isRefreshBadness() {
+		return refreshBadness;
+	}
+	public void setRefreshBadness(boolean refreshBadness) {
+		this.refreshBadness = refreshBadness;
+	}
 	public boolean isRefreshGroup() {
 		return refreshGroup;
 	}
@@ -31,6 +38,7 @@ public class MyApplication extends Application{
 	public void setRefreshSize(boolean refreshSize) {
 		this.refreshSize = refreshSize;
 	}
+	
 	
 	@Override
 	public void onCreate() {

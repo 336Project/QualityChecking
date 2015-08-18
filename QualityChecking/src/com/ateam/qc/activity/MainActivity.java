@@ -105,6 +105,10 @@ public class MainActivity extends Activity implements OnClickListener {
 	 * 项目序号
 	 */
 	private int projectNum = 0;
+	/**
+	 * 项目选择计数器，第一次选择，即初始化时不执行
+	 */
+	private int groupSelectNum=0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -318,16 +322,19 @@ public class MainActivity extends Activity implements OnClickListener {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSpinnerGroup.setAdapter(adapter);
 		mSpinnerGroup.setOnItemSelectedListener(new OnItemSelectedListener() {
-
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				mLinearlayoutForm.removeAllViews();
-				mExcelItemDatas = new HashMap<Integer, ExcelItem>();
-				mExcelItemLinearLayouts = new ArrayList<ExcelItemLinearLayout>();
-				findAllBadness();
-				findAllProject();
-
+				if(groupSelectNum==0){
+					groupSelectNum+=1;
+				}
+				else{
+					mLinearlayoutForm.removeAllViews();
+					mExcelItemDatas = new HashMap<Integer, ExcelItem>();
+					mExcelItemLinearLayouts = new ArrayList<ExcelItemLinearLayout>();
+					findAllBadness();
+					findAllProject();
+				}
 			}
 
 			@Override
@@ -360,7 +367,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
 			}
 			if (mBadnesses.size() != 0) {
-				excelItem.setSize(mSizes.get(excelItemLinearLayout
+				excelItem.setBadness(mBadnesses.get(excelItemLinearLayout
 						.getBadnessSize()));
 			}
 			mExcelItemDatas.put(excelItemLinearLayout.getId(), excelItem);
@@ -637,8 +644,12 @@ public class MainActivity extends Activity implements OnClickListener {
 			excelItem.setExamineNum(excelItemLinearLayout.getAsViewExamine()
 					.getNum());
 			excelItem.setNgNum(excelItemLinearLayout.getAsViewNg().getNum());
+			
+			excelItem.setBadness(mBadnesses.get(excelItemLinearLayout.getBadnessSize()));
+			
 			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
 					.getText().toString().trim());
+			
 			excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
 			excelItem.setSizeName(mSizes.get(excelItemLinearLayout.getSize())
 					.getName());

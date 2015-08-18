@@ -21,6 +21,10 @@ public class BadnessDao extends HBaseDao {
 		return mDb.findAll(Badness.class);
 	}
 	
+	public List<Badness> queryByGroupName(String groupName){
+		return mDb.findAllByWhere(Badness.class, "groupName = '"+groupName+"'");
+	}
+	
 	public void delete(int id){
 		mDb.deleteById(Badness.class, id);
 	}

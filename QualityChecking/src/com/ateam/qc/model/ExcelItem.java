@@ -12,8 +12,10 @@ public class ExcelItem {
 	private int flowId;//流水号用来和excel表中的数据进行绑定
 	private Project project; //项目内容 
 	private Size size; //型号
+	private Badness badness; //不良
 	private String sizeName;//型号名称
 	private String porjectName;//项目名称
+	private String badnessName; //不良状况名称
 	private int checkNum; //检查数量
 	private int unqualifiedNum; //不合格数量
 	private int examineNum;//查核数量
@@ -128,5 +130,17 @@ public class ExcelItem {
 	}
 	public void setPictureArray(String[] pictureArray) {
 		this.pictureArray = pictureArray;
+	}
+	public Badness getBadness() {
+		return badness;
+	}
+	public void setBadness(Badness badness) {
+		this.badness = badness;
+	}
+	public String getBadnessName() {
+		return badnessName;
+	}
+	public void setBadnessName(String badnessName) {
+		this.badnessName = badnessName;
 	}
 }

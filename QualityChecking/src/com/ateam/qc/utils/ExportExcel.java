@@ -2,8 +2,10 @@ package com.ateam.qc.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.ateam.qc.constant.Constant;
 import com.ateam.qc.model.Excel;
@@ -122,6 +124,19 @@ public class ExportExcel {
 							Constant.SAVED_IMAGE_DIR_PATH,
 							excelItem.getPicturePath());
 					File imageData = new File(filePath);
+					Date date=new Date(imageData.lastModified()); //这个是最后修改时间
+					SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+			        String updateTime=format.format(date);  //图片修改时间
+					
+			        StringBuffer imageContent = new StringBuffer();
+			        imageContent.append(updateTime);
+			    	if(excelItem.getBadness()!=null){
+			    		imageContent.append(excelItem.getProcessMode()+excelItem.getBadness().getName());
+					}
+					else{
+						imageContent.append(excelItem.getProcessMode());
+					}
+			        
 					WritableImage image = new WritableImage(1, 4 * weight + 16
 							* (weight - 1), 10, 16, imageData);
 					try {
@@ -235,8 +250,15 @@ public class ExportExcel {
 					li.add(SysUtil.format(((float)excelItem.getUnqualifiedNum()
 							/excelItem.getCheckNum())*100) + "%");
 				}
-				li.add(excelItem.getProject().getContent());
-				li.add(excelItem.getProcessMode());
+				li.add(excelItem.getProject().getShortName());
+				
+				if(excelItem.getBadness()!=null){
+					li.add(excelItem.getProcessMode()+excelItem.getBadness().getName());
+				}
+				else{
+					li.add(excelItem.getProcessMode());
+				}
+				
 
 				System.out.println(li.size());
 				int k = 0;

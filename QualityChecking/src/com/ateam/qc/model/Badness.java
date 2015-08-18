@@ -31,6 +31,13 @@ public class Badness implements Serializable{
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
-	
+	@Override
+	public boolean equals(Object o) {
+		Badness otherSize=(Badness)o;
+		if(this.id==otherSize.getId()){
+			return true;
+		}
+		return false;
+	}
 	
 }

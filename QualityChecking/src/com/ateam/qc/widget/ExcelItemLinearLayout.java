@@ -38,11 +38,13 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	 */
 	private Spinner spSize;
 	private Spinner spProject;
+	private Spinner spBadness;
 	/**
 	 * Spinner适配器的position
 	 */
 	private int size;
 	private int projectSize;
+	private int badnessSize;
 
 	public static final int REQUEST_CODE_CAMERA = 1002;
 	private Activity activity;
@@ -52,6 +54,7 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	private Context context;
 	private Uri fileUri;
 	private String path;
+	
 
 	public TextView getTvTakePhoto() {
 		return tvTakePhoto;
@@ -78,21 +81,27 @@ public class ExcelItemLinearLayout extends LinearLayout {
 	public Spinner getSpSize() {
 		return spSize;
 	}
-
 	public void setSpSize(Spinner spSize) {
 		this.spSize = spSize;
+	}
+	public int getBadnessSize() {
+		return badnessSize;
 	}
 	public Spinner getSpProject() {
 		return spProject;
 	}
-
 	public void setSpProject(Spinner spProject) {
 		this.spProject = spProject;
+	}
+	public Spinner getSpBadness() {
+		return spBadness;
+	}
+	public void setSpBadness(Spinner spBadness) {
+		this.spBadness = spBadness;
 	}
 	public EditText getEtProcessMode() {
 		return etProcessMode;
 	}
-
 	public void setEtProcessMode(EditText etProcessMode) {
 		this.etProcessMode = etProcessMode;
 	}
@@ -181,6 +190,21 @@ public class ExcelItemLinearLayout extends LinearLayout {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
+		// 不良状况
+		spBadness = (Spinner) view.findViewById(R.id.sp_badness);
+		spBadness.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				setBadnessSize(arg2);
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+		
+		
 		tvTakePhoto = (TextView) view.findViewById(R.id.tv_take_photo);
 		tvTakePhoto.setOnClickListener(new OnClickListener() {
 			@Override
@@ -209,6 +233,10 @@ public class ExcelItemLinearLayout extends LinearLayout {
 			}
 		});
 		addView(view, paramsChild);
+	}
+
+	protected void setBadnessSize(int badnessSize) {
+		this.badnessSize=badnessSize;
 	}
 
 	/**

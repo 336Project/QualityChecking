@@ -1,14 +1,9 @@
 package com.ateam.qc.activity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.ateam.qc.R;
-import com.ateam.qc.R.drawable;
-import com.ateam.qc.R.id;
-import com.ateam.qc.R.layout;
-import com.ateam.qc.R.string;
 import com.ateam.qc.application.MyApplication;
 import com.ateam.qc.dao.GroupDao;
 import com.ateam.qc.model.Group;

@@ -84,6 +84,7 @@ public class SettingProjectActivity extends HBaseActivity {
 	 * 添加项目
 	 */
 	public void addProject(View view){
+		refreshNo();
 		AlertDialog.Builder builder=new Builder(this);
 		builder.setCancelable(false);
 		builder.setTitle("添加项目");
@@ -185,7 +186,7 @@ public class SettingProjectActivity extends HBaseActivity {
 			return;
 		}
 		final Project currPro = pro;
-		
+		refreshNo();
 		AlertDialog.Builder builder=new Builder(this);
 		builder.setCancelable(false);
 		builder.setTitle("修改项目");
@@ -290,7 +291,6 @@ public class SettingProjectActivity extends HBaseActivity {
 		mDatas.addAll(mProjectDao.query());
 		mAdapter.setHasChecked(new boolean[mDatas.size()]);
 		mAdapter.notifyDataSetChanged();
-		refreshNo();
 	}
 	/**
 	 * 适配器

@@ -101,6 +101,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private String creatTime;
 	private String excelName;
 	private int currentGroupPosition = 0;
+	private boolean isPause=false;
 	/**
 	 * 项目序号
 	 */
@@ -325,8 +326,9 @@ public class MainActivity extends Activity implements OnClickListener {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				if(groupSelectNum==0){
+				if(groupSelectNum==0||isPause==true){
 					groupSelectNum+=1;
+					isPause=false;
 				}
 				else{
 					mLinearlayoutForm.removeAllViews();
@@ -336,7 +338,6 @@ public class MainActivity extends Activity implements OnClickListener {
 					findAllProject();
 				}
 			}
-
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 
@@ -347,7 +348,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
+		isPause=true;
 		for (ExcelItemLinearLayout excelItemLinearLayout : mExcelItemLinearLayouts) {
 			ExcelItem excelItem = new ExcelItem();
 			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
@@ -381,21 +382,26 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 		super.onResume();
 		mApplication = (MyApplication) getApplication();
+		Log.e("重启", "重启");
 		if (mApplication.isRefreshGroup()) {
+			Log.e("重启1", "重启1");
 			findAllGroups();
 			findAllBadness();
 			mApplication.setRefreshGroup(false);
 		}
 		if (mApplication.isRefreshSize()) {
+			Log.e("重启2", "重启2");
 			findAllSize();
 			mApplication.setRefreshSize(false);
 		}
 		if (mApplication.isRefreshProject()) {
+			Log.e("重启3", "重启3");
 			findAllProject();
 			mApplication.setRefreshProject(false);
 		}
 
 		if (mApplication.isRefreshBadness()) {
+			Log.e("重启4", "重启4");
 			findAllBadness();
 			mApplication.setRefreshBadness(false);
 		}
@@ -592,14 +598,19 @@ public class MainActivity extends Activity implements OnClickListener {
 				this, MainActivity.this);
 
 		excelItemLinearLayout.setId(projectNum);
-		excelItemLinearLayout.getSpProject().setAdapter(mProjectAdapter);
-		excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
-		excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString()
-				.trim()
-				+ projectNum + ".png");
+		if(mProjectAdapter!=null){
+			excelItemLinearLayout.getSpProject().setAdapter(mProjectAdapter);
+		}
+		if(mSizeAdapter!=null){
+			excelItemLinearLayout.getSpSize().setAdapter(mSizeAdapter);
+		}
+		if(mBadnessAdapter!=null){
+			excelItemLinearLayout.getSpBadness().setAdapter(mBadnessAdapter);
+		}
+		excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+ projectNum + ".png");
+		
 		mExcelItemLinearLayouts.add(excelItemLinearLayout);
-		mLinearlayoutForm.addView(excelItemLinearLayout,
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		mLinearlayoutForm.addView(excelItemLinearLayout,LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	}
 
 	private void saveExcel() {

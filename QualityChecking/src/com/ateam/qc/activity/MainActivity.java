@@ -200,7 +200,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		mLinearlayoutForm.addView(excelItemLinearLayout,
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		
-		Log.e("!!!!", "!!!");
 		// for (Project project : mProjects) {
 		// ExcelItemLinearLayout excelItemLinearLayout = new
 		// ExcelItemLinearLayout(
@@ -353,33 +352,31 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
-//		isPause=true;
-//		for (ExcelItemLinearLayout excelItemLinearLayout : mExcelItemLinearLayouts) {
-//			ExcelItem excelItem = new ExcelItem();
-//			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
-//					.getNum());
-//			excelItem.setUnqualifiedNum(excelItemLinearLayout
-//					.getAsViewUnqualified().getNum());
-//			excelItem.setExamineNum(excelItemLinearLayout.getAsViewExamine()
-//					.getNum());
-//			excelItem.setNgNum(excelItemLinearLayout.getAsViewNg().getNum());
-//			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
-//					.getText().toString().trim());
-//			if (mProjects.size() != 0) {
-//				excelItem.setProject(mProjects.get(excelItemLinearLayout
-//						.getProjectSize()));
-//			}
-//			if (mSizes.size() != 0) {
-//				excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
-//			}
-//			if (mBadnesses.size() != 0) {
-//				excelItem.setBadness(mBadnesses.get(excelItemLinearLayout
-//						.getBadnessSize()));
-//			}
-//			mExcelItemDatas.put(excelItemLinearLayout.getId(), excelItem);
-//		}
-		Log.e("onPause", "onPause:"+mExcelItemLinearLayouts.size());
+		isPause=true;
+		for (ExcelItemLinearLayout excelItemLinearLayout : mExcelItemLinearLayouts) {
+			ExcelItem excelItem = new ExcelItem();
+			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
+					.getNum());
+			excelItem.setUnqualifiedNum(excelItemLinearLayout
+					.getAsViewUnqualified().getNum());
+			excelItem.setExamineNum(excelItemLinearLayout.getAsViewExamine()
+					.getNum());
+			excelItem.setNgNum(excelItemLinearLayout.getAsViewNg().getNum());
+			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
+					.getText().toString().trim());
+			if (mProjects.size() != 0) {
+				excelItem.setProject(mProjects.get(excelItemLinearLayout
+						.getProjectSize()));
+			}
+			if (mSizes.size() != 0) {
+				excelItem.setSize(mSizes.get(excelItemLinearLayout.getSize()));
+			}
+			if (mBadnesses.size() != 0) {
+				excelItem.setBadness(mBadnesses.get(excelItemLinearLayout
+						.getBadnessSize()));
+			}
+			mExcelItemDatas.put(excelItemLinearLayout.getId(), excelItem);
+		}
 	}
 
 	/**
@@ -391,28 +388,24 @@ public class MainActivity extends Activity implements OnClickListener {
 		mApplication = (MyApplication) getApplication();
 		Log.e("onResume", "onResume:"+mExcelItemLinearLayouts.size());
 		
-//		if (mApplication.isRefreshGroup()) {
-//			Log.e("重启1", "重启1");
-//			findAllGroups();
-//			findAllBadness();
-//			mApplication.setRefreshGroup(false);
-//		}
-//		if (mApplication.isRefreshSize()) {
-//			Log.e("重启2", "重启2");
-//			findAllSize();
-//			mApplication.setRefreshSize(false);
-//		}
-//		if (mApplication.isRefreshProject()) {
-//			Log.e("重启3", "重启3");
-//			findAllProject();
-//			mApplication.setRefreshProject(false);
-//		}
-//
-//		if (mApplication.isRefreshBadness()) {
-//			Log.e("重启4", "重启4");
-//			findAllBadness();
-//			mApplication.setRefreshBadness(false);
-//		}
+		if (mApplication.isRefreshGroup()) {
+			findAllGroups();
+			findAllBadness();
+			mApplication.setRefreshGroup(false);
+		}
+		if (mApplication.isRefreshSize()) {
+			findAllSize();
+			mApplication.setRefreshSize(false);
+		}
+		if (mApplication.isRefreshProject()) {
+			findAllProject();
+			mApplication.setRefreshProject(false);
+		}
+
+		if (mApplication.isRefreshBadness()) {
+			findAllBadness();
+			mApplication.setRefreshBadness(false);
+		}
 	}
 
 	private void findAllBadness() {
@@ -486,8 +479,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 		}
 		mExcelItemDatas = mTempExcelItemDatas;
-		
-		Log.e("findAllProject", "findAllProject");
 		
 		mLinearlayoutForm.removeAllViews();
 		mExcelItemLinearLayouts.clear();

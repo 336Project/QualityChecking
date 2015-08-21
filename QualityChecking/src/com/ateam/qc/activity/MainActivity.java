@@ -1,6 +1,5 @@
 package com.ateam.qc.activity;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,12 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.ateam.qc.R;
-import com.ateam.qc.R.id;
-import com.ateam.qc.R.layout;
-import com.ateam.qc.adapter.ContentItemAdapter;
 import com.ateam.qc.application.MyApplication;
 import com.ateam.qc.dao.BadnessDao;
 import com.ateam.qc.dao.ExcelDao;
@@ -31,22 +26,17 @@ import com.ateam.qc.model.Size;
 import com.ateam.qc.utils.ExportExcel;
 import com.ateam.qc.utils.MyToast;
 import com.ateam.qc.widget.ExcelItemLinearLayout;
-import com.team.hbase.utils.FileUtil;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -54,11 +44,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
 
@@ -348,7 +336,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
 		isPause=true;
 		for (ExcelItemLinearLayout excelItemLinearLayout : mExcelItemLinearLayouts) {
 			ExcelItem excelItem = new ExcelItem();
@@ -384,9 +371,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onResume();
 		mApplication = (MyApplication) getApplication();
 		Log.e("重启", "重启");
-		
-		Log.e("mExcelItemLinearLayouts---onResume", "mExcelItemLinearLayouts---onResume:"+mExcelItemLinearLayouts.size());
-		
 		if (mApplication.isRefreshGroup()) {
 			Log.e("重启1", "重启1");
 			findAllGroups();
@@ -481,15 +465,15 @@ public class MainActivity extends Activity implements OnClickListener {
 					mTempExcelItemDatas.put(key, excelItem);
 					break;
 				}
+
 			}
 		}
+
 		mExcelItemDatas = mTempExcelItemDatas;
-		
-		Log.e("findAllProject", "findAllProject");
-		
-		
+
 		mLinearlayoutForm.removeAllViews();
 		mExcelItemLinearLayouts.clear();
+
 		Iterator iterator = mExcelItemDatas.entrySet().iterator();
 		Log.e("iterator.hasNext()", "iterator.hasNext():" + iterator.hasNext());
 		while (iterator.hasNext()) {
@@ -512,8 +496,12 @@ public class MainActivity extends Activity implements OnClickListener {
 			if (sizeIndexOf > -1) {
 				excelItemLinearLayout.getSpSize().setSelection(sizeIndexOf);
 			}
-			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+ key + ".png");
-			excelItemLinearLayout.getAsViewCheck().setNum(excelItem.getCheckNum());
+
+			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString()
+					.trim()
+					+ key + ".png");
+			excelItemLinearLayout.getAsViewCheck().setNum(
+					excelItem.getCheckNum());
 			excelItemLinearLayout.getAsViewUnqualified().setNum(
 					excelItem.getUnqualifiedNum());
 			excelItemLinearLayout.getAsViewExamine().setNum(
@@ -521,6 +509,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			excelItemLinearLayout.getAsViewNg().setNum(excelItem.getNgNum());
 			excelItemLinearLayout.getEtProcessMode().setText(
 					excelItem.getProcessMode());
+
 			mExcelItemLinearLayouts.add(excelItemLinearLayout);
 			mLinearlayoutForm.addView(excelItemLinearLayout,
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -645,8 +634,8 @@ public class MainActivity extends Activity implements OnClickListener {
 					.get(i);
 			ExcelItem excelItem = new ExcelItem();
 			excelItem.setFlowId(mFlowId);
-			excelItem.setProject(mProjects.get(excelItemLinearLayout.getProjectSize()));
-			excelItem.setPorjectName(mProjects.get(excelItemLinearLayout.getProjectSize()).getShortName());
+			excelItem.setProject(mProjects.get(i));
+			excelItem.setPorjectName(mProjects.get(i).getShortName());
 			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
 					.getNum());
 			excelItem.setUnqualifiedNum(excelItemLinearLayout

@@ -108,8 +108,7 @@ public class ExportExcel {
 						Label labelHead = new Label(
 								1, 
 								5 * weight + 16* (weight), 
-								excelItem.getTime() + "　"
-								+ excelItem.getProcessMode(), 
+								imageContent.toString(), 
 								wc);
 						wsPicture.addCell(labelHead);
 					} catch (RowsExceededException e) {

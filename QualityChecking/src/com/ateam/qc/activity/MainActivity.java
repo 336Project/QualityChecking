@@ -348,6 +348,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
 		isPause=true;
 		for (ExcelItemLinearLayout excelItemLinearLayout : mExcelItemLinearLayouts) {
 			ExcelItem excelItem = new ExcelItem();
@@ -383,6 +384,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onResume();
 		mApplication = (MyApplication) getApplication();
 		Log.e("重启", "重启");
+		
+		Log.e("mExcelItemLinearLayouts---onResume", "mExcelItemLinearLayouts---onResume:"+mExcelItemLinearLayouts.size());
+		
 		if (mApplication.isRefreshGroup()) {
 			Log.e("重启1", "重启1");
 			findAllGroups();
@@ -477,15 +481,15 @@ public class MainActivity extends Activity implements OnClickListener {
 					mTempExcelItemDatas.put(key, excelItem);
 					break;
 				}
-
 			}
 		}
-
 		mExcelItemDatas = mTempExcelItemDatas;
-
+		
+		Log.e("findAllProject", "findAllProject");
+		
+		
 		mLinearlayoutForm.removeAllViews();
 		mExcelItemLinearLayouts.clear();
-
 		Iterator iterator = mExcelItemDatas.entrySet().iterator();
 		Log.e("iterator.hasNext()", "iterator.hasNext():" + iterator.hasNext());
 		while (iterator.hasNext()) {
@@ -508,12 +512,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			if (sizeIndexOf > -1) {
 				excelItemLinearLayout.getSpSize().setSelection(sizeIndexOf);
 			}
-
-			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString()
-					.trim()
-					+ key + ".png");
-			excelItemLinearLayout.getAsViewCheck().setNum(
-					excelItem.getCheckNum());
+			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+ key + ".png");
+			excelItemLinearLayout.getAsViewCheck().setNum(excelItem.getCheckNum());
 			excelItemLinearLayout.getAsViewUnqualified().setNum(
 					excelItem.getUnqualifiedNum());
 			excelItemLinearLayout.getAsViewExamine().setNum(
@@ -521,7 +521,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			excelItemLinearLayout.getAsViewNg().setNum(excelItem.getNgNum());
 			excelItemLinearLayout.getEtProcessMode().setText(
 					excelItem.getProcessMode());
-
 			mExcelItemLinearLayouts.add(excelItemLinearLayout);
 			mLinearlayoutForm.addView(excelItemLinearLayout,
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -646,7 +645,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					.get(i);
 			ExcelItem excelItem = new ExcelItem();
 			excelItem.setFlowId(mFlowId);
-			excelItem.setProject(mProjects.get(i));
+			excelItem.setProject(mProjects.get(excelItemLinearLayout.getProjectSize()));
 			excelItem.setPorjectName(mProjects.get(i).getShortName());
 			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
 					.getNum());

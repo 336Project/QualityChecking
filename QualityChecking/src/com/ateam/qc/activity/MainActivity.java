@@ -646,7 +646,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			ExcelItem excelItem = new ExcelItem();
 			excelItem.setFlowId(mFlowId);
 			excelItem.setProject(mProjects.get(excelItemLinearLayout.getProjectSize()));
-			excelItem.setPorjectName(mProjects.get(i).getShortName());
+			excelItem.setPorjectName(mProjects.get(excelItemLinearLayout.getProjectSize()).getShortName());
 			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
 					.getNum());
 			excelItem.setUnqualifiedNum(excelItemLinearLayout

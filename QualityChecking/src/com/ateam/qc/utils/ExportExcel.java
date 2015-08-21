@@ -77,43 +77,6 @@ public class ExportExcel {
 
 			ArrayList<ExcelItem> excelItemsList = excel.getExcelItemsList();
 			int weight = 1;
-			/**
-			 * 如果已经存在excel表数据  获取图片并添加的新表中  begin
-			 */
-			if(hasExcel){
-				ArrayList<String> history;
-				// 获得第一个工作表对象            
-				Sheet sheet = book.getSheet(1); 
-				Rows = sheet.getRows(); 
-				for (int i = 2; i < Rows; ++i) { 
-					history = new ArrayList<String>();
-					history.add((sheet.getCell(0, i)).getContents());
-					history.add((sheet.getCell(1, i)).getContents());
-					history.add((sheet.getCell(2, i)).getContents());
-					history.add((sheet.getCell(3, i)).getContents());
-					history.add((sheet.getCell(4, i)).getContents());
-					history.add((sheet.getCell(5, i)).getContents());
-					history.add((sheet.getCell(6, i)).getContents());
-					history.add((sheet.getCell(7, i)).getContents());
-					System.out.println(history.size());
-					int k = 0;
-					for (String l : history) {
-						Label labelC = new Label(k, i, l);
-						k++;
-						try {
-							// 将生成的单元格添加到工作表中
-							ws.addCell(labelC);
-						} catch (RowsExceededException e) {
-							e.printStackTrace();
-						} catch (WriteException e) {
-							e.printStackTrace();
-						}
-					}
-					history = null;
-				} 
-				book.close(); 
-			}
-			
 			for (int i = 0; i < excelItemsList.size(); i++) {
 				ExcelItem excelItem = excelItemsList.get(i);
 				boolean fileExist = FileUtil.getInstance().isFileExist(

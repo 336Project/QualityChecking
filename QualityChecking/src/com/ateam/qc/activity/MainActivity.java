@@ -628,22 +628,20 @@ public class MainActivity extends Activity implements OnClickListener {
 		ArrayList<ExcelItem> excelItemsList = new ArrayList<ExcelItem>();
 
 		for (int i = 0; i < mExcelItemLinearLayouts.size(); i++) {
-			ExcelItemLinearLayout excelItemLinearLayout = mExcelItemLinearLayouts
-					.get(i);
+			ExcelItemLinearLayout excelItemLinearLayout = mExcelItemLinearLayouts.get(i);
+			
 			ExcelItem excelItem = new ExcelItem();
 			excelItem.setFlowId(mFlowId);
-			excelItem.setProject(mProjects.get(i));
-			excelItem.setPorjectName(mProjects.get(i).getShortName());
-			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck()
-					.getNum());
-			excelItem.setUnqualifiedNum(excelItemLinearLayout
-					.getAsViewUnqualified().getNum());
-			excelItem.setExamineNum(excelItemLinearLayout.getAsViewExamine()
-					.getNum());
+			excelItem.setProject(mProjects.get(excelItemLinearLayout.getProjectSize()));
+			excelItem.setPorjectName(mProjects.get(excelItemLinearLayout.getProjectSize()).getShortName());
+			excelItem.setCheckNum(excelItemLinearLayout.getAsViewCheck().getNum());
+			excelItem.setUnqualifiedNum(excelItemLinearLayout.getAsViewUnqualified().getNum());
+			excelItem.setExamineNum(excelItemLinearLayout.getAsViewExamine().getNum());
 			excelItem.setNgNum(excelItemLinearLayout.getAsViewNg().getNum());
 			
-			excelItem.setBadness(mBadnesses.get(excelItemLinearLayout.getBadnessSize()));
-			
+			if(mBadnesses.size()>0){
+				excelItem.setBadness(mBadnesses.get(excelItemLinearLayout.getBadnessSize()));
+			}
 			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
 					.getText().toString().trim());
 			

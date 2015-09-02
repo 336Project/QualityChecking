@@ -182,7 +182,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		excelItemLinearLayout.getSpProject().setAdapter(mProjectAdapter);
 		excelItemLinearLayout.getSpBadness().setAdapter(mBadnessAdapter);
 
-		excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+ excelItemLinearLayout.getId() + ".png");
+		excelItemLinearLayout.setPhotoFileName(fomatTimeByTime()+ excelItemLinearLayout.getId() + ".png");
 
 		mExcelItemLinearLayouts.add(excelItemLinearLayout);
 		mLinearlayoutForm.addView(excelItemLinearLayout,
@@ -495,8 +495,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				excelItemLinearLayout.getSpSize().setSelection(sizeIndexOf);
 			}
 
-			excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString()
-					.trim()
+			excelItemLinearLayout.setPhotoFileName(fomatTimeByTime()
 					+ key + ".png");
 			excelItemLinearLayout.getAsViewCheck().setNum(
 					excelItem.getCheckNum());
@@ -593,7 +592,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(mBadnessAdapter!=null){
 			excelItemLinearLayout.getSpBadness().setAdapter(mBadnessAdapter);
 		}
-		excelItemLinearLayout.setPhotoFileName(tvTime.getText().toString().trim()+ projectNum + ".png");
+		excelItemLinearLayout.setPhotoFileName(fomatTimeByTime()+ projectNum + ".png");
 		
 		mExcelItemLinearLayouts.add(excelItemLinearLayout);
 		mLinearlayoutForm.addView(excelItemLinearLayout,LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -668,6 +667,12 @@ public class MainActivity extends Activity implements OnClickListener {
 	public String formatTime() {
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+		return simpleDateFormat.format(date);
+	}
+	
+	public String fomatTimeByTime(){
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HHmmss");
 		return simpleDateFormat.format(date);
 	}
 }

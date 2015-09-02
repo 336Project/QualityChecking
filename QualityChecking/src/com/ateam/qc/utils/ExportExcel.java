@@ -84,7 +84,7 @@ public class ExportExcel {
 						excelItem.getPicturePath());
 				if (fileExist) {
 					String filePath = FileUtil.getInstance().getFilePath(
-							Constant.SAVED_IMAGE_DIR_PATH,
+							Constant.SAVED_IMAGE_DIR_PATH,	
 							excelItem.getPicturePath());
 					File imageData = new File(filePath);
 					Date date=new Date(imageData.lastModified()); //这个是最后修改时间

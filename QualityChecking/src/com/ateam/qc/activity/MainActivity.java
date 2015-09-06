@@ -26,6 +26,7 @@ import com.ateam.qc.model.Size;
 import com.ateam.qc.utils.ExportExcel;
 import com.ateam.qc.utils.MyToast;
 import com.ateam.qc.widget.ExcelItemLinearLayout;
+import com.team.hbase.widget.dialog.CustomProgressDialog;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -34,6 +35,8 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,6 +47,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -51,7 +55,10 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener {
 
+	private static final int SUCCESS=0;
+	private static final int FAIL=1;
 	private DrawerLayout drawerLayout;
+	private CustomProgressDialog mProgress;
 
 	private GroupDao mGroupDao;
 	private List<Group> mGroups;
@@ -74,6 +81,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private String[] mProjectStrings;
 	private String[] mSizeStrings;
 	private String[] mBadnessStrings;
+	private Excel excel;
 
 	/**
 	 * Spinner适配器
@@ -99,6 +107,22 @@ public class MainActivity extends Activity implements OnClickListener {
 	 * 项目选择计数器，第一次选择，即初始化时不执行
 	 */
 	private int groupSelectNum=0;
+	
+	Handler handler=new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			mProgress.stopAndDismiss();
+			if(msg.what==MainActivity.SUCCESS){
+				Toast.makeText(MainActivity.this, "生成excel成功！", Toast.LENGTH_SHORT)
+				.show();
+			}else{
+				Toast.makeText(MainActivity.this, "生成excel失败！", Toast.LENGTH_SHORT)
+				.show();
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +132,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	private void initView() {
+		mProgress=new CustomProgressDialog(this, "导出中...");
 		TextView tvTitlename = (TextView) findViewById(R.id.tv_titlename);
 		tvTitlename.setText("表格录入");
 		RelativeLayout rlRight = (RelativeLayout) findViewById(R.id.rl_right);
@@ -457,7 +482,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 			Integer key = (Integer) entry.getKey();
-			ExcelItem excelItem = (ExcelItem) entry.getValue();
+			ExcelItem excelItem = (ExcelItem) entry.getValue();	
 			for (Project project : mProjects) {
 				if (excelItem.getProject() != null
 						&& project.getId() == excelItem.getProject().getId()) {
@@ -605,6 +630,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			MyToast.showShort(this, "暂无需保存数据!");
 			return;
 		}
+		mProgress.show();
 		ExcelDao excelDao = new ExcelDao(this);
 		ExcelItemDao excelItemDao = new ExcelItemDao(this);
 		SharedPreferences flowId = getSharedPreferences("flowId",Activity.MODE_PRIVATE);
@@ -617,7 +643,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		excelSave.setFanHao(etFanhao.getText().toString().trim());
 		excelDao.save(excelSave);
 
-		Excel excel = new Excel();
+		excel = new Excel();
 		excel.setFlowId(mFlowId);
 		excel.setTime(creatTime);
 		excel.setGroup(mGroups.get(mSpinnerGroup.getSelectedItemPosition())
@@ -657,7 +683,14 @@ public class MainActivity extends Activity implements OnClickListener {
 			excelItemDao.save(excelItem);
 		}
 		excel.setExcelItemsList(excelItemsList);
-		ExportExcel.export(this, excel, excelName);
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				ExportExcel.export(MainActivity.this, excel, excelName,handler);
+			}
+		}).start();
 		Editor edit = flowId.edit();
 		mFlowId = mFlowId + 1;
 		edit.putInt("flowId", mFlowId);

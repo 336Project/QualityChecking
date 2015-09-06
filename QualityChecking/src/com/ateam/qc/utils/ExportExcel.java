@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.ateam.qc.activity.MainActivity;
 import com.ateam.qc.constant.Constant;
 import com.ateam.qc.model.Excel;
 import com.ateam.qc.model.ExcelItem;
 import com.team.hbase.utils.FileUtil;
+import com.team.hbase.widget.dialog.CustomProgressDialog;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -27,6 +29,7 @@ import jxl.write.biff.RowsExceededException;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,7 +41,7 @@ public class ExportExcel {
 	private static int Rows=0;
 
 	// 导出数据
-	public static void export(Context context, Excel excel, String excelName) {
+	public static void export(Context context, Excel excel, String excelName,Handler handler) {
 		mContext = context;
 		WritableWorkbook wwb = null;
 		try {
@@ -67,6 +70,7 @@ public class ExportExcel {
 	    		}
 			wwb = Workbook.createWorkbook(file);
 		} catch (IOException e) {
+			handler.sendEmptyMessage(1);
 			e.printStackTrace();
 		}
 		if (wwb != null) {
@@ -84,11 +88,11 @@ public class ExportExcel {
 						excelItem.getPicturePath());
 				if (fileExist) {
 					String filePath = FileUtil.getInstance().getFilePath(
-							Constant.SAVED_IMAGE_DIR_PATH,	
+							Constant.SAVED_IMAGE_DIR_PATH,
 							excelItem.getPicturePath());
 					File imageData = new File(filePath);
 					Date date=new Date(imageData.lastModified()); //这个是最后修改时间
-					SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+					SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			        String updateTime=format.format(date);  //图片修改时间
 					
 			        StringBuffer imageContent = new StringBuffer();
@@ -112,8 +116,10 @@ public class ExportExcel {
 								wc);
 						wsPicture.addCell(labelHead);
 					} catch (RowsExceededException e) {
+						handler.sendEmptyMessage(1);
 						e.printStackTrace();
 					} catch (WriteException e) {
+						handler.sendEmptyMessage(1);
 						e.printStackTrace();
 					}
 
@@ -131,8 +137,10 @@ public class ExportExcel {
 						wc);
 				ws.addCell(labelHead);
 			} catch (RowsExceededException e1) {
+				handler.sendEmptyMessage(1);
 				e1.printStackTrace();
 			} catch (WriteException e1) {
+				handler.sendEmptyMessage(1);
 				e1.printStackTrace();
 			}
 			// 下面开始添加单元格
@@ -144,8 +152,10 @@ public class ExportExcel {
 					// 将生成的单元格添加到工作表中
 					ws.addCell(labelC);
 				} catch (RowsExceededException e) {
+					handler.sendEmptyMessage(1);
 					e.printStackTrace();
 				} catch (WriteException e) {
+					handler.sendEmptyMessage(1);
 					e.printStackTrace();
 				}
 			}
@@ -180,8 +190,10 @@ public class ExportExcel {
 							// 将生成的单元格添加到工作表中
 							ws.addCell(labelC);
 						} catch (RowsExceededException e) {
+							handler.sendEmptyMessage(1);
 							e.printStackTrace();
 						} catch (WriteException e) {
+							handler.sendEmptyMessage(1);
 							e.printStackTrace();
 						}
 					}
@@ -236,8 +248,10 @@ public class ExportExcel {
 						// 将生成的单元格添加到工作表中
 						ws.addCell(labelC);
 					} catch (RowsExceededException e) {
+						handler.sendEmptyMessage(1);
 						e.printStackTrace();
 					} catch (WriteException e) {
+						handler.sendEmptyMessage(1);
 						e.printStackTrace();
 					}
 				}
@@ -249,19 +263,16 @@ public class ExportExcel {
 				wwb.write();
 				// 关闭资源，释放内存
 				wwb.close();
-				Toast.makeText(mContext, "生成excel成功！", Toast.LENGTH_SHORT)
-						.show();
+				handler.sendEmptyMessage(0);
 			} catch (IOException e) {
+				handler.sendEmptyMessage(1);
 				e.printStackTrace();
-				Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT)
-						.show();
 			} catch (WriteException e) {
+				handler.sendEmptyMessage(1);
 				e.printStackTrace();
-				Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT)
-						.show();
 			}
 		} else {
-			Toast.makeText(mContext, "生成excel失败！", Toast.LENGTH_SHORT).show();
+			handler.sendEmptyMessage(1);
 		}
 	}
 	

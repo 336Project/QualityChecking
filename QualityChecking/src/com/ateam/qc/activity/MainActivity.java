@@ -697,7 +697,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		edit.commit();
 	}
 
-	public String formatTime() {
+	public static String formatTime() {
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
 		return simpleDateFormat.format(date);

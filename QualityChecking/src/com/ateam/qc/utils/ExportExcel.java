@@ -9,8 +9,10 @@ import java.util.Date;
 
 import com.ateam.qc.activity.MainActivity;
 import com.ateam.qc.constant.Constant;
+import com.ateam.qc.dao.ExcelPictureItemDao;
 import com.ateam.qc.model.Excel;
 import com.ateam.qc.model.ExcelItem;
+import com.ateam.qc.model.ExcelPictureItem;
 import com.team.hbase.utils.FileUtil;
 import com.team.hbase.widget.dialog.CustomProgressDialog;
 
@@ -28,6 +30,8 @@ import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
@@ -42,6 +46,27 @@ public class ExportExcel {
 
 	// 导出数据
 	public static void export(Context context, Excel excel, String excelName,Handler handler) {
+		ArrayList<ExcelItem> excelItemsList = excel.getExcelItemsList();
+		//不断的更新当天的 图片的数据保存
+		SharedPreferences sp = context.getSharedPreferences("labletime", Context.MODE_PRIVATE); 
+		String time=sp.getString("time", "");
+		ExcelPictureItemDao dao=new ExcelPictureItemDao(context);
+		if(!time.equals(MainActivity.formatTime())){
+			dao.deleteAll();
+			Editor editor = sp.edit();//获取编辑器
+			editor.putString("time", MainActivity.formatTime());
+			editor.commit();//提交修改
+		}
+		//将新添加的图信息添加到数据库中保存
+		for (int i = 0; i < excelItemsList.size(); i++) {
+			ExcelPictureItem pictureItem=new ExcelPictureItem();
+			pictureItem.setBadness(excelItemsList.get(i).getBadness());
+			pictureItem.setPicturePath(excelItemsList.get(i).getPicturePath());
+			pictureItem.setProcessMode(excelItemsList.get(i).getProcessMode());
+			dao.save(pictureItem);
+		}
+		ArrayList<ExcelPictureItem> excelPictureItemsList = new ArrayList<ExcelPictureItem>();
+		excelPictureItemsList=(ArrayList<ExcelPictureItem>) dao.query();
 		mContext = context;
 		WritableWorkbook wwb = null;
 		try {
@@ -79,17 +104,16 @@ public class ExportExcel {
 			WritableSheet ws = wwb.createSheet("数量统计", 0);
 			WritableSheet wsPicture = wwb.createSheet("照片", 1);
 
-			ArrayList<ExcelItem> excelItemsList = excel.getExcelItemsList();
 			int weight = 1;
-			for (int i = 0; i < excelItemsList.size(); i++) {
-				ExcelItem excelItem = excelItemsList.get(i);
+			for (int i = 0; i < excelPictureItemsList.size(); i++) {
+				ExcelPictureItem excelPictureItem = excelPictureItemsList.get(i);
 				boolean fileExist = FileUtil.getInstance().isFileExist(
 						Constant.SAVED_IMAGE_DIR_PATH,
-						excelItem.getPicturePath());
+						excelPictureItem.getPicturePath());
 				if (fileExist) {
 					String filePath = FileUtil.getInstance().getFilePath(
 							Constant.SAVED_IMAGE_DIR_PATH,
-							excelItem.getPicturePath());
+							excelPictureItem.getPicturePath());
 					File imageData = new File(filePath);
 					Date date=new Date(imageData.lastModified()); //这个是最后修改时间
 					SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -97,11 +121,11 @@ public class ExportExcel {
 					
 			        StringBuffer imageContent = new StringBuffer();
 			        imageContent.append(updateTime);
-			    	if(excelItem.getBadness()!=null){
-			    		imageContent.append(excelItem.getProcessMode()+excelItem.getBadness().getName());
+			    	if(excelPictureItem.getBadness()!=null){
+			    		imageContent.append(excelPictureItem.getProcessMode()+excelPictureItem.getBadness().getName());
 					}
 					else{
-						imageContent.append(excelItem.getProcessMode());
+						imageContent.append(excelPictureItem.getProcessMode());
 					}
 			        
 					WritableImage image = new WritableImage(1, 4 * weight + 16
@@ -163,7 +187,7 @@ public class ExportExcel {
 			/**
 			 * 如果已经存在excel表数据  获取并添加的新表中  begin
 			 */
-			if(hasExcel){
+			if(hasExcel&&book!=null){
 				ArrayList<String> history;
 				// 获得第一个工作表对象            
 				Sheet sheet = book.getSheet(0); 
@@ -238,7 +262,7 @@ public class ExportExcel {
 				int k = 0;
 				int fistRow=0;
 				//要是有历史数据  行从 j+rows 即当前数据列加上已有行数， 没有历史数据  就从j+fistrow 去掉头部的第三行开始
-				if(!hasExcel){
+				if(!(hasExcel&&book!=null)){
 					fistRow=2;
 				}
 				for (String l : li) {

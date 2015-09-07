@@ -666,6 +666,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 			if(mBadnesses.size()>0){
 				excelItem.setBadness(mBadnesses.get(excelItemLinearLayout.getBadnessSize()));
+				excelItem.setSelectBadnessName(mBadnesses.get(excelItemLinearLayout.getBadnessSize()).getName());
 			}
 			excelItem.setProcessMode(excelItemLinearLayout.getEtProcessMode()
 					.getText().toString().trim());

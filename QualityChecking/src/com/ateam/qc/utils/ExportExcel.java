@@ -2,24 +2,19 @@ package com.ateam.qc.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import com.ateam.qc.activity.MainActivity;
 import com.ateam.qc.constant.Constant;
-import com.ateam.qc.dao.ExcelPictureItemDao;
+import com.ateam.qc.dao.ExcelItemDao;
 import com.ateam.qc.model.Excel;
 import com.ateam.qc.model.ExcelItem;
-import com.ateam.qc.model.ExcelPictureItem;
 import com.team.hbase.utils.FileUtil;
-import com.team.hbase.widget.dialog.CustomProgressDialog;
 
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.format.Alignment;
-import jxl.format.CellFormat;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
@@ -30,12 +25,8 @@ import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
-import android.widget.Toast;
 
 public class ExportExcel {
 	private static Context mContext;
@@ -46,27 +37,11 @@ public class ExportExcel {
 
 	// 导出数据
 	public static void export(Context context, Excel excel, String excelName,Handler handler) {
-		ArrayList<ExcelItem> excelItemsList = excel.getExcelItemsList();
-		//不断的更新当天的 图片的数据保存
-		SharedPreferences sp = context.getSharedPreferences("labletime", Context.MODE_PRIVATE); 
-		String time=sp.getString("time", "");
-		ExcelPictureItemDao dao=new ExcelPictureItemDao(context);
-		if(!time.equals(MainActivity.formatTime())){
-			dao.deleteAll();
-			Editor editor = sp.edit();//获取编辑器
-			editor.putString("time", MainActivity.formatTime());
-			editor.commit();//提交修改
-		}
-		//将新添加的图信息添加到数据库中保存
-		for (int i = 0; i < excelItemsList.size(); i++) {
-			ExcelPictureItem pictureItem=new ExcelPictureItem();
-			pictureItem.setBadness(excelItemsList.get(i).getBadness());
-			pictureItem.setPicturePath(excelItemsList.get(i).getPicturePath());
-			pictureItem.setProcessMode(excelItemsList.get(i).getProcessMode());
-			dao.save(pictureItem);
-		}
-		ArrayList<ExcelPictureItem> excelPictureItemsList = new ArrayList<ExcelPictureItem>();
-		excelPictureItemsList=(ArrayList<ExcelPictureItem>) dao.query();
+		hasExcel=false;
+//		ArrayList<ExcelItem> excelItemsList = excel.getExcelItemsList();
+		ArrayList<ExcelItem> excelPictureItemsList = new ArrayList<ExcelItem>();
+		ExcelItemDao dao=new ExcelItemDao(context);
+		excelPictureItemsList=(ArrayList<ExcelItem>) dao.findByEqualTime(MainActivity.formatTime());
 		mContext = context;
 		WritableWorkbook wwb = null;
 		try {
@@ -106,7 +81,7 @@ public class ExportExcel {
 
 			int weight = 1;
 			for (int i = 0; i < excelPictureItemsList.size(); i++) {
-				ExcelPictureItem excelPictureItem = excelPictureItemsList.get(i);
+				ExcelItem excelPictureItem = excelPictureItemsList.get(i);
 				boolean fileExist = FileUtil.getInstance().isFileExist(
 						Constant.SAVED_IMAGE_DIR_PATH,
 						excelPictureItem.getPicturePath());
@@ -116,11 +91,11 @@ public class ExportExcel {
 							excelPictureItem.getPicturePath());
 					File imageData = new File(filePath);
 					Date date=new Date(imageData.lastModified()); //这个是最后修改时间
-					SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			        String updateTime=format.format(date);  //图片修改时间
+//					SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//			        String updateTime=format.format(date);  //图片修改时间
 					
 			        StringBuffer imageContent = new StringBuffer();
-			        imageContent.append(updateTime);
+			        imageContent.append(excelPictureItem.getTime());
 			    	if(excelPictureItem.getBadness()!=null){
 			    		imageContent.append(excelPictureItem.getProcessMode()+excelPictureItem.getBadness().getName());
 					}
@@ -128,7 +103,7 @@ public class ExportExcel {
 						imageContent.append(excelPictureItem.getProcessMode());
 					}
 			        
-					WritableImage image = new WritableImage(1, 4 * weight + 16
+					WritableImage image = new WritableImage(1, 5 * weight + 16
 							* (weight - 1), 10, 16, imageData);
 					try {
 						WritableCellFormat wc = new WritableCellFormat();
@@ -187,56 +162,56 @@ public class ExportExcel {
 			/**
 			 * 如果已经存在excel表数据  获取并添加的新表中  begin
 			 */
-			if(hasExcel&&book!=null){
-				ArrayList<String> history;
-				// 获得第一个工作表对象            
-				Sheet sheet = book.getSheet(0); 
-				Rows = sheet.getRows(); 
-				for (int i = 2; i < Rows; ++i) { 
-//						for (int j = 0; j < Cols; ++j) { 
-//							
-//						} 
-					history = new ArrayList<String>();
-					history.add((sheet.getCell(0, i)).getContents());
-					history.add((sheet.getCell(1, i)).getContents());
-					history.add((sheet.getCell(2, i)).getContents());
-					history.add((sheet.getCell(3, i)).getContents());
-					history.add((sheet.getCell(4, i)).getContents());
-					history.add((sheet.getCell(5, i)).getContents());
-					history.add((sheet.getCell(6, i)).getContents());
-					history.add((sheet.getCell(7, i)).getContents());
-					System.out.println(history.size());
-					int k = 0;
-					for (String l : history) {
-						Label labelC = new Label(k, i, l);
-						k++;
-						try {
-							// 将生成的单元格添加到工作表中
-							ws.addCell(labelC);
-						} catch (RowsExceededException e) {
-							handler.sendEmptyMessage(1);
-							e.printStackTrace();
-						} catch (WriteException e) {
-							handler.sendEmptyMessage(1);
-							e.printStackTrace();
-						}
-					}
-					history = null;
-				} 
-				book.close(); 
-			}
+//			if(hasExcel&&book!=null){
+//				ArrayList<String> history;
+//				// 获得第一个工作表对象            
+//				Sheet sheet = book.getSheet(0); 
+//				Rows = sheet.getRows(); 
+//				for (int i = 2; i < Rows; ++i) { 
+////						for (int j = 0; j < Cols; ++j) { 
+////							
+////						} 
+//					history = new ArrayList<String>();
+//					history.add((sheet.getCell(0, i)).getContents());
+//					history.add((sheet.getCell(1, i)).getContents());
+//					history.add((sheet.getCell(2, i)).getContents());
+//					history.add((sheet.getCell(3, i)).getContents());
+//					history.add((sheet.getCell(4, i)).getContents());
+//					history.add((sheet.getCell(5, i)).getContents());
+//					history.add((sheet.getCell(6, i)).getContents());
+//					history.add((sheet.getCell(7, i)).getContents());
+//					System.out.println(history.size());
+//					int k = 0;
+//					for (String l : history) {
+//						Label labelC = new Label(k, i, l);
+//						k++;
+//						try {
+//							// 将生成的单元格添加到工作表中
+//							ws.addCell(labelC);
+//						} catch (RowsExceededException e) {
+//							handler.sendEmptyMessage(1);
+//							e.printStackTrace();
+//						} catch (WriteException e) {
+//							handler.sendEmptyMessage(1);
+//							e.printStackTrace();
+//						}
+//					}
+//					history = null;
+//				} 
+//				book.close(); 
+//			}
 			/**
 			 * 如果已经存在excel表数据  获取并添加的新表中  end
 			 */
 			ArrayList<String> li;
 
 			//外面传入的值存入excel中
-			for (int j = 0; j < excelItemsList.size(); j++) {
+			for (int j = 0; j < excelPictureItemsList.size(); j++) {
 
-				ExcelItem excelItem = excelItemsList.get(j);
+				ExcelItem excelItem = excelPictureItemsList.get(j);
 				li = new ArrayList<String>();
 
-				li.add(excelItem.getSize().getName());
+				li.add(excelItem.getSizeName());
 				li.add(excelItem.getExamineNum() + "");
 				li.add(excelItem.getNgNum() + "");
 				li.add(excelItem.getCheckNum() + "");
@@ -248,10 +223,10 @@ public class ExportExcel {
 					li.add(SysUtil.format(((float)excelItem.getUnqualifiedNum()
 							/excelItem.getCheckNum())*100) + "%");
 				}
-				li.add(excelItem.getProject().getShortName());
+				li.add(excelItem.getPorjectName());
 				
-				if(excelItem.getBadness()!=null){
-					li.add(excelItem.getProcessMode()+excelItem.getBadness().getName());
+				if(excelItem.getSelectBadnessName()!=null){
+					li.add(excelItem.getProcessMode()+excelItem.getSelectBadnessName());
 				}
 				else{
 					li.add(excelItem.getProcessMode());
@@ -260,7 +235,7 @@ public class ExportExcel {
 
 				System.out.println(li.size());
 				int k = 0;
-				int fistRow=0;
+				int fistRow=2;
 				//要是有历史数据  行从 j+rows 即当前数据列加上已有行数， 没有历史数据  就从j+fistrow 去掉头部的第三行开始
 				if(!(hasExcel&&book!=null)){
 					fistRow=2;

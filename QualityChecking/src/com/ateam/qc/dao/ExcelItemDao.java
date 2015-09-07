@@ -51,6 +51,15 @@ public class ExcelItemDao extends HBaseDao {
 		return mDb.findAllByWhere(ExcelItem.class, "time>='"+beginTime+"'"+" and time<='"+endTime+"'");
 	}
 	
+	/**
+	 * 根据时间查询
+	 * @param time
+	 * @return
+	 */
+	public List<ExcelItem> findByEqualTime(String time){
+		return mDb.findAllByWhere(ExcelItem.class, "time='"+time+"'");
+	}
+	
 	public void delete(int id){
 		mDb.deleteById(ExcelItem.class, id);
 	}

@@ -13,6 +13,7 @@ public class ExcelItem {
 	private Project project; //项目内容 
 	private Size size; //型号
 	private Badness badness; //不良
+	private String selectBadnessName;//选中的不良状况的名称（用户保存后选中的不良状况）
 	private String sizeName;//型号名称
 	private String porjectName;//项目名称
 	private String badnessName; //不良状况名称
@@ -28,7 +29,12 @@ public class ExcelItem {
 	private String time;//日期
 	private String fanHao;//番号
 	
-	
+	public String getSelectBadnessName() {
+		return selectBadnessName;
+	}
+	public void setSelectBadnessName(String selectBadnessName) {
+		this.selectBadnessName = selectBadnessName;
+	}
 	public String getMyGroup() {
 		return myGroup;
 	}
